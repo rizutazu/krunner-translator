@@ -6,7 +6,9 @@ Original project is here: https://github.com/naraesk/krunner-translator
 
 ## Feature
 
-Most of the original features are removed. Configuration feature is not implemented, and Google Translate is the only engine. You could only specify translating destination language. Specifying source language is not supported, the program will always use auto detect. 
+- Translate text
+
+Most of relevant original features are removed. Configuration is not implemented, and Google Translate is the only engine. You could only specify translating destination language. Specifying source language is not supported, the program will always use auto detect. 
 
 Maybe these features would be added back further. 
 
@@ -18,7 +20,11 @@ For example,
 
  `zh how about this?` --> `这个怎么样？`
 
+- Play audio for the text
 
+<img src="assets/image-20240922203840874.png" alt="image-20240922203840874" style="zoom:50%;" />
+
+As shown above
 
 ## Installation
 

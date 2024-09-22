@@ -31,7 +31,7 @@ public:
     // explicit TranslateShellProcess(const QString &engine, QObject *parent = 0);
     ~TranslateShellProcess();
     QString translate(const QString &language, const QString &text);
-    // void play(const QString &text);
+    void playAudio(const QString &text);
 private:
     // QProcess process(0);
     // QString engine = "google";

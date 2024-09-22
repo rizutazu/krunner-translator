@@ -59,30 +59,58 @@ void Translator::match(KRunner::RunnerContext &context) {
     QString text;
     QString language;
 
-    std::cerr << "New query: " << term.toStdString() << std::endl;
+    // std::cerr << "New query: " << term.toStdString() << std::endl;
 
     if (!parseTerm(term, text, language)) return;
     if (!context.isValid()) return;
 
-    std::cerr << "pase ok, lan: " << language.toStdString() << " text: " << text.toStdString() << std::endl;
+    // std::cerr << "parse ok, lan: " << language.toStdString() << " text: " << text.toStdString() << std::endl;
 
     QString result = translateShellProcess.translate(language, text);
 
-    std::cerr << "get result: " << result.toStdString() << std::endl;
+    // std::cerr << "get result: " << result.toStdString() << std::endl;
 
-    KRunner::QueryMatch match(this);
-    // match.setType(KRunner::QueryMatch::ExactMatch);
-    match.setIcon(QIcon::fromTheme(QStringLiteral("applications-education-language")));
-    match.setText(result);
-    match.setSubtext(QStringLiteral("Google Translate"));
-    match.setRelevance(1); 
-    
-    // match.setSelectedAction(actions.first());
-    context.addMatch(match);
+    // match case for translated text
+    KRunner::QueryMatch translationMatch(this);
+
+    translationMatch.setIcon(QIcon::fromTheme(QStringLiteral("applications-education-language")));
+    translationMatch.setText(result);
+    translationMatch.setSubtext(QStringLiteral("Google Translate"));
+    translationMatch.setMatchCategory(QStringLiteral("Translation"));
+    translationMatch.setRelevance(1); 
+
+    context.addMatch(translationMatch);
+
+    // match case for playing audio of text being translated
+    KRunner::QueryMatch playAudioTranslationMatch(this);
+    playAudioTranslationMatch.setIcon(QIcon::fromTheme(QStringLiteral("media-play")));
+    playAudioTranslationMatch.setText(text);
+    playAudioTranslationMatch.setSubtext(QStringLiteral("Play Audio"));
+    playAudioTranslationMatch.setMatchCategory(QStringLiteral("Play Audio"));
+    playAudioTranslationMatch.setRelevance(1);
+
+    context.addMatch(playAudioTranslationMatch);
+
+    KRunner::QueryMatch playAudioTextMatch(this);
+    playAudioTextMatch.setIcon(QIcon::fromTheme(QStringLiteral("media-play")));
+    playAudioTextMatch.setText(result);
+    playAudioTextMatch.setSubtext(QStringLiteral("Play Audio"));
+    playAudioTextMatch.setMatchCategory(QStringLiteral("Play Audio"));
+    playAudioTextMatch.setRelevance(1);
+
+    context.addMatch(playAudioTextMatch);
 }
 
 void Translator::run(const KRunner::RunnerContext &context, const KRunner::QueryMatch &match) {
-    QApplication::clipboard()->setText(match.text());
+    QString category = match.matchCategory();
+    if (category == QStringLiteral("Translation")) {
+        QApplication::clipboard()->setText(match.text());
+    } else if (category == QStringLiteral("Play Audio")) {
+        translateShellProcess.playAudio(match.text());
+    } else {
+        std::cerr << "Unknown query match category: " << category.toStdString() << std::endl;
+    }
+    
 }
 
 // QList<QAction *> Translator::actionsForMatch(const Plasma::QueryMatch &match) {

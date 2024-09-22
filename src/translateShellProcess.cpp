@@ -57,11 +57,13 @@ QString TranslateShellProcess::translate(const QString &language, const QString 
     // return QString::fromStdString("");
 }
 
-// void TranslateShellProcess::play(const QString &text) {
-//     QStringList arguments;
-//     arguments << text
-//               << QStringLiteral("-speak")
-//               << QStringLiteral("-no-translate");
-//     start("trans", arguments);
-//     waitForFinished();
-// }
+void TranslateShellProcess::playAudio(const QString &text) {
+    QStringList arguments;
+    arguments << QStringLiteral("-speak")
+            //   << QStringLiteral("-no-translate")
+              << text;
+
+    QProcess process;
+    process.start(QString::fromStdString("trans"), arguments);
+    process.waitForFinished();
+}
