@@ -13,10 +13,10 @@
         "Description": "Translates into any language",
         "EnabledByDefault": true,
         "Icon": "applications-education-language",
-        "Id": "Translator",
+        "Id": "KRunnerTranslator",
         "License": "GPL",
         "Name": "Translator",
-        "Version": "0.0.1"
+        "Version": "0.0.2"
     },
     "X-Plasma-AdvertiseSingleRunnerQueryMode": true
 }

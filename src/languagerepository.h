@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2013 – 2018 by David Baum <david.baum@naraesk.eu>           *
+ *  Copyright (C) 2013 – 2020 by David Baum <david.baum@naraesk.eu>           *
  *                                                                            *
  *  This library is free software; you can redistribute it and/or modify      *
  *  it under the terms of the GNU Lesser General Public License as published  *
@@ -16,28 +16,25 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#ifndef TRANSLATOR_H
-#define TRANSLATOR_H
+#ifndef LANGUAGEREPOSITORY_H
+#define LANGUAGEREPOSITORY_H
 
+#include "languages.h"
 
-#include "LanguageRepository.h"
-#include "translateShellProcess.h"
-#include <KRunner/AbstractRunner>
-
-class Translator : public KRunner::AbstractRunner
-{
-    Q_OBJECT
-
+class LanguageRepository {
 public:
-    Translator(QObject *parent, const KPluginMetaData &metaData);
-    void match(KRunner::RunnerContext &) override;
-    void run(const KRunner::RunnerContext &context, const KRunner::QueryMatch &match) override;
-    void reloadConfiguration() override;
-    bool parseTerm(const QString &term, QString &text, QString &language);
+    void addSupportedLanguage(SupportedLanguage language, QString name, QString abbreviation);
+
+    void initialize();
+
+    // QList<class Language> getSupportedLanguages();
+
+    bool containsAbbreviation(QString abbreviation);
+
+    // QString getCombinedName(QString abbreviation);
 
 private:
-    LanguageRepository languageRepository;
-    TranslateShellProcess translateShellProcess;
+    QMap<SupportedLanguage, Language> *supportedLanguages = new QMap<SupportedLanguage, Language>;
 };
 
-#endif
+#endif // LANGUAGEREPOSITORY_H

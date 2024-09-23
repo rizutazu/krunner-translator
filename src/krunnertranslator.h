@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2013 – 2020 by David Baum <david.baum@naraesk.eu>           *
+ *  Copyright (C) 2013 – 2018 by David Baum <david.baum@naraesk.eu>           *
  *                                                                            *
  *  This library is free software; you can redistribute it and/or modify      *
  *  it under the terms of the GNU Lesser General Public License as published  *
@@ -16,25 +16,37 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#ifndef RUNNERTRANSLATOR_LANGUAGEREPOSITORY_H
-#define RUNNERTRANSLATOR_LANGUAGEREPOSITORY_H
+#ifndef TRANSLATOR_H
+#define TRANSLATOR_H
 
-#include "languages.h"
+#include <KRunner/AbstractRunner>
+#include <QList>
+#include "languagerepository.h"
+#include "abstracttranslateengine.h"
 
-class LanguageRepository {
+class KRunnerTranslator : public KRunner::AbstractRunner
+{
+    Q_OBJECT
+
 public:
-    void addSupportedLanguage(SupportedLanguage language, QString name, QString abbreviation);
-
-    void initialize();
-
-    // QList<class Language> getSupportedLanguages();
-
-    bool containsAbbreviation(QString abbreviation);
-
-    // QString getCombinedName(QString abbreviation);
+    KRunnerTranslator(QObject *parent, const KPluginMetaData &metaData);
+    ~KRunnerTranslator();
+    void match(KRunner::RunnerContext &) override;
+    void run(const KRunner::RunnerContext &context, const KRunner::QueryMatch &match) override;
+    void reloadConfiguration() override;
 
 private:
-    QMap<SupportedLanguage, Language> *supportedLanguages = new QMap<SupportedLanguage, Language>;
+    bool parseTerm(const QString &term, QString &text, QString &language);
+
+    KRunner::QueryMatch generateTranslationMatch(const QString &provider, const QString &result);
+    // Translation match should have a provider mark
+
+    KRunner::QueryMatch generatePlayAudioMatch(const QString &text);
+    // only one Play Audio match is needed
+
+    LanguageRepository languageRepository;
+
+    QList<AbstractTranslateEngine*> engines;
 };
 
-#endif //RUNNERTRANSLATOR_LANGUAGEREPOSITORY_H
+#endif

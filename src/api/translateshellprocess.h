@@ -16,25 +16,23 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#ifndef RUNNERTRANSLATOR_TRANSLATESHELLPROCESS_H
-#define RUNNERTRANSLATOR_TRANSLATESHELLPROCESS_H
+#ifndef TRANSLATESHELLPROCESS_H
+#define TRANSLATESHELLPROCESS_H
 
 #include <QProcess>
 #include <QString>
-// #include <QObject>
 
-class TranslateShellProcess
-{
+class TranslateShellProcess {
 
 public:
     TranslateShellProcess();
-    // explicit TranslateShellProcess(const QString &engine, QObject *parent = 0);
     ~TranslateShellProcess();
-    QString translate(const QString &language, const QString &text);
-    void playAudio(const QString &text);
+    // QString translate(const QString &language, const QString &text);
+    static bool googleTranslate(const QString &language, const QString &text, QString &result);
+    static bool bingTranslate(const QString &language, const QString &text, QString &result);
+    static void playAudio(const QString &text);
 private:
-    // QProcess process(0);
-    // QString engine = "google";
+    static bool translate(const QString &engine, const QString &language, const QString &text, QString &result);
 };
 
-#endif //RUNNERTRANSLATOR_TRANSLATESHELLPROCESS_H
+#endif //TRANSLATESHELLPROCESS_H

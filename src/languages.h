@@ -16,14 +16,14 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#ifndef RUNNERTRANSLATOR_LANGUAGES_H
-#define RUNNERTRANSLATOR_LANGUAGES_H
+#ifndef LANGUAGES_H
+#define LANGUAGES_H
 
 
 #include <QtCore/QString>
 #include <QtCore/QList>
 #include <QtCore/QVariant>
-#include "SupportedLanguages.h"
+#include "supportedlanguages.h"
 
 class Language {
 
@@ -47,4 +47,4 @@ private:
 
 Q_DECLARE_METATYPE(Language)
 
-#endif //RUNNERTRANSLATOR_LANGUAGES_H
+#endif // LANGUAGES_H

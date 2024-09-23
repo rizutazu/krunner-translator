@@ -16,46 +16,12 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#include "translateShellProcess.h"
+#include "translateshellprocess.h"
 #include <QTextStream>
-// #include <iostream>
-// #include <QString>
 
-TranslateShellProcess::TranslateShellProcess() {
-    // process = new QProcess(0);
-}
+TranslateShellProcess::TranslateShellProcess() {}
 
-// TranslateShellProcess::TranslateShellProcess(const QString &engine_, QObject *parent) : QProcess(parent),
-//                                                                                         engine(engine_) {
-// }
-
-TranslateShellProcess::~TranslateShellProcess() {
-    // if (process != nullptr) {
-    //     delete process;
-    // }
-};
-
-QString TranslateShellProcess::translate(const QString &language, const QString &text) {
-    QStringList arguments;
-    arguments << QStringLiteral(":") + language
-              << text
-              << QStringLiteral("--brief")
-              << QStringLiteral("-e")
-              << QStringLiteral("google");
-
-    QProcess process;
-// process.start(QString::fromStdString("whoami"));
-// process.waitForFinished(-1); // this could be omitted
-// QTextStream txtStream(&process);
-// QString username = txtStream.readLine();
-    
-    process.start(QString::fromStdString("trans"), arguments);
-    process.waitForFinished();
-    QTextStream txtStream(&process);
-    QString composeOutput = txtStream.readLine();
-    return composeOutput;
-    // return QString::fromStdString("");
-}
+TranslateShellProcess::~TranslateShellProcess() {}
 
 void TranslateShellProcess::playAudio(const QString &text) {
     QStringList arguments;
@@ -66,4 +32,36 @@ void TranslateShellProcess::playAudio(const QString &text) {
     QProcess process;
     process.start(QString::fromStdString("trans"), arguments);
     process.waitForFinished();
+}
+
+
+bool TranslateShellProcess::translate(const QString &engine, const QString &language, const QString &text, QString &result) {
+    QStringList arguments;
+    arguments << QStringLiteral(":") + language
+              << text
+              << QStringLiteral("--brief")
+              << QStringLiteral("-e")
+              << engine;
+
+    QProcess process;
+    process.start(QString::fromStdString("trans"), arguments);
+
+    if (process.waitForStarted()) { // if command failed to start
+        process.waitForFinished();
+        if (process.exitStatus() == QProcess::NormalExit) { // exit status 0
+            QTextStream txtStream(&process);
+            result = txtStream.readLine();
+            return true;
+        }
+        return false;
+    }
+    return false;
+}
+
+bool TranslateShellProcess::googleTranslate(const QString &language, const QString &text, QString &result) {
+    return TranslateShellProcess::translate(QStringLiteral("google"), language, text, result);    
+}
+
+bool TranslateShellProcess::bingTranslate(const QString &language, const QString &text, QString &result) {
+    return TranslateShellProcess::translate(QStringLiteral("bing"), language, text, result);
 }

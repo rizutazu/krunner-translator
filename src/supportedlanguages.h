@@ -16,8 +16,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#ifndef RUNNERTRANSLATOR_SUPPORTEDLANGUAGES_H
-#define RUNNERTRANSLATOR_SUPPORTEDLANGUAGES_H
+#ifndef SUPPORTEDLANGUAGES_H
+#define SUPPORTEDLANGUAGES_H
 
 enum SupportedLanguage {
     Afrikaans,
@@ -131,4 +131,4 @@ enum SupportedLanguage {
     Zulu
 };
 
-#endif //RUNNERTRANSLATOR_SUPPORTEDLANGUAGES_H
+#endif // SUPPORTEDLANGUAGES_H

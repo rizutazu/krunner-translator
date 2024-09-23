@@ -16,7 +16,7 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#include "LanguageRepository.h"
+#include "languagerepository.h"
 
 void LanguageRepository::initialize() {
     addSupportedLanguage(Afrikaans, QStringLiteral("Afrikaans"), QStringLiteral("af"));
