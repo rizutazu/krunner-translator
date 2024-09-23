@@ -26,11 +26,11 @@ class TranslateShellProcess {
 
 public:
     // QString translate(const QString &language, const QString &text);
-    static bool googleTranslate(const QString &language, const QString &text, QString &result);
-    static bool bingTranslate(const QString &language, const QString &text, QString &result);
-    static void playAudio(const QString &text);
+    static bool googleTranslate(const QPair<QString, QString> &language, const QString &text, QString &result);
+    static bool bingTranslate(const QPair<QString, QString> &language, const QString &text, QString &result);
+    static void playAudio(const QString &text, const QString &language);
 private:
-    static bool translate(const QString &engine, const QString &language, const QString &text, QString &result);
+    static bool translate(const QString &engine, const QPair<QString, QString> &language, const QString &text, QString &result);
 };
 
 #endif //TRANSLATESHELLPROCESS_H

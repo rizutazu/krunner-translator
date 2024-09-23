@@ -19,20 +19,23 @@
 #include "translateshellprocess.h"
 #include <QTextStream>
 
-void TranslateShellProcess::playAudio(const QString &text) {
+void TranslateShellProcess::playAudio(const QString &text, const QString &language) {
     QStringList arguments;
-    arguments << QStringLiteral("-speak")
+    arguments << language + QStringLiteral(":") 
+              << QStringLiteral("-speak")
             //   << QStringLiteral("-no-translate")
               << text;
     QProcess process;
-    process.start(QString::fromStdString("trans"), arguments);
-    process.waitForFinished();
+    process.setProgram(QStringLiteral("trans"));
+    process.setArguments(arguments);
+    process.startDetached(nullptr);
+    process.setStandardOutputFile(QProcess::nullDevice());
 }
 
 
-bool TranslateShellProcess::translate(const QString &engine, const QString &language, const QString &text, QString &result) {
+bool TranslateShellProcess::translate(const QString &engine, const QPair<QString, QString> &languages, const QString &text, QString &result) {
     QStringList arguments;
-    arguments << QStringLiteral(":") + language
+    arguments << languages.first + QStringLiteral(":") + languages.second
               << text
               << QStringLiteral("--brief")
               << QStringLiteral("-e")
@@ -53,10 +56,11 @@ bool TranslateShellProcess::translate(const QString &engine, const QString &lang
     return false;
 }
 
-bool TranslateShellProcess::googleTranslate(const QString &language, const QString &text, QString &result) {
-    return TranslateShellProcess::translate(QStringLiteral("google"), language, text, result);    
+
+bool TranslateShellProcess::googleTranslate(const QPair<QString, QString> &languages, const QString &text, QString &result) {
+    return TranslateShellProcess::translate(QStringLiteral("google"), languages, text, result);    
 }
 
-bool TranslateShellProcess::bingTranslate(const QString &language, const QString &text, QString &result) {
-    return TranslateShellProcess::translate(QStringLiteral("bing"), language, text, result);
+bool TranslateShellProcess::bingTranslate(const QPair<QString, QString> &languages, const QString &text, QString &result) {
+    return TranslateShellProcess::translate(QStringLiteral("bing"), languages, text, result);
 }

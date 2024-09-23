@@ -5,6 +5,6 @@ const QString BingTranslate::getProviderName() {
     return QStringLiteral("Bing Translate");
 }
 
-bool BingTranslate::translate(const QString &language, const QString &text, QString &result) {
-    return TranslateShellProcess::bingTranslate(language, text, result);
+bool BingTranslate::translate(const QPair<QString, QString> &languages, const QString &text, QString &result) {
+    return TranslateShellProcess::bingTranslate(languages, text, result);
 }

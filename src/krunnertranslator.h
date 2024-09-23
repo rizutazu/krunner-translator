@@ -23,6 +23,7 @@
 #include <QList>
 #include "languagerepository.h"
 #include "abstracttranslateengine.h"
+#include <QPair>
 
 class KRunnerTranslator : public KRunner::AbstractRunner
 {
@@ -31,18 +32,18 @@ class KRunnerTranslator : public KRunner::AbstractRunner
 public:
     KRunnerTranslator(QObject *parent, const KPluginMetaData &metaData);
     ~KRunnerTranslator();
-    void match(KRunner::RunnerContext &) override;
+    void match(KRunner::RunnerContext &context) override;
     void run(const KRunner::RunnerContext &context, const KRunner::QueryMatch &match) override;
     void reloadConfiguration() override;
 
 private:
-    bool parseTerm(const QString &term, QString &text, QString &language);
+    bool parseTerm(const QString &term, QString &text, QPair<QString, QString> &languages);
 
     KRunner::QueryMatch generateTranslationMatch(const QString &provider, const QString &result);
     // Translation match should have a provider mark
 
-    KRunner::QueryMatch generatePlayAudioMatch(const QString &text);
-    // only one Play Audio match is needed
+    KRunner::QueryMatch generatePlayAudioMatch(const QString &text, const QString &language);
+    // play audio for text, need to specify language
 
     LanguageRepository languageRepository;
 
