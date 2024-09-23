@@ -25,8 +25,6 @@
 class TranslateShellProcess {
 
 public:
-    TranslateShellProcess();
-    ~TranslateShellProcess();
     // QString translate(const QString &language, const QString &text);
     static bool googleTranslate(const QString &language, const QString &text, QString &result);
     static bool bingTranslate(const QString &language, const QString &text, QString &result);

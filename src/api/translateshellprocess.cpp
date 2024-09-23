@@ -19,16 +19,11 @@
 #include "translateshellprocess.h"
 #include <QTextStream>
 
-TranslateShellProcess::TranslateShellProcess() {}
-
-TranslateShellProcess::~TranslateShellProcess() {}
-
 void TranslateShellProcess::playAudio(const QString &text) {
     QStringList arguments;
     arguments << QStringLiteral("-speak")
             //   << QStringLiteral("-no-translate")
               << text;
-
     QProcess process;
     process.start(QString::fromStdString("trans"), arguments);
     process.waitForFinished();

@@ -15,8 +15,6 @@ include(KDECompilerSettings NO_POLICY_SCOPE)
 find_package (Qt6 ${QT_MIN_VERSION} REQUIRED CONFIG COMPONENTS Core Widgets)
 find_package (KF6 ${KF6_MIN_VERSION} REQUIRED COMPONENTS Runner)
 
-
-
 set(krunner_translator_SRCS
         src/krunnertranslator.cpp src/krunnertranslator.h
         src/languagerepository.cpp src/languagerepository.h src/languages.cpp src/languages.h src/supportedlanguages.h
@@ -32,9 +30,7 @@ kcoreaddons_add_plugin(krunner_translator SOURCES ${krunner_translator_SRCS} INS
 
 # Now make sure all files get to the right place
 # add_library(krunner_translator MODULE ${krunner_translator_SRCS})
-target_link_libraries(krunner_translator KF6::Runner Qt6::Core Qt6::Widgets)
+target_link_libraries(krunner_translator 
+                        KF6::Runner 
+                        Qt6::Core Qt6::Widgets)
 
-
-# install(TARGETS krunner_translator DESTINATION ${PLUGIN_INSTALL_DIR}/krunner)
-# install(TARGETS kcm_krunner_translator DESTINATION ${PLUGIN_INSTALL_DIR})
-# install(FILES src/config/plasma-runner-translator_config.desktop DESTINATION ${SERVICES_INSTALL_DIR})

@@ -24,6 +24,9 @@
 // #include <QThread>
 #include <QIcon>
 #include <QDebug>
+#include <QList>
+// #include <QtConcurrent>
+#include <QThreadPool>
 #include "googletranslate.h"
 #include "bingtranslate.h"
 #include "translateshellprocess.h"
@@ -38,6 +41,7 @@ KRunnerTranslator::KRunnerTranslator(QObject *parent, const KPluginMetaData &met
     // init engines
     
 }
+
 KRunnerTranslator::~KRunnerTranslator() {
     for (auto engine : engines) {
         delete engine;
@@ -56,17 +60,21 @@ void KRunnerTranslator::match(KRunner::RunnerContext &context) {
     if (!context.isValid()) return;
 
     // std::cerr << "parse ok, lan: " << language.toStdString() << " text: " << text.toStdString() << std::endl;
-
     for (auto engine : engines) {
-        QString result;
-        if (engine->translate(language, text, result)) { // translate ok
-            context.addMatch(generateTranslationMatch(engine->getProviderName(), result)); // add translation result
-            if (engine->getProviderName() == QStringLiteral("Google Translate")) { // for google translate: add play audio
-                context.addMatch(generatePlayAudioMatch(result));
-                context.addMatch(generatePlayAudioMatch(text));
-            }
-        }
+        QThreadPool::globalInstance()->start([&, engine](){ 
+        // variable `engine` should not be reference capture, 
+        // because `engine++;` at each loop end will change corresponding variable in running thread
+            QString result;
+            if (engine->translate(language, text, result)) { // translate ok
+                context.addMatch(generateTranslationMatch(engine->getProviderName(), result)); // add translation result
+                if (engine->getProviderName() == QStringLiteral("Google Translate")) { // for google translate: add play audio
+                    context.addMatch(generatePlayAudioMatch(result));
+                    context.addMatch(generatePlayAudioMatch(text));
+                }
+            }  
+        });
     }
+    QThreadPool::globalInstance()->waitForDone();
 }
 
 void KRunnerTranslator::run(const KRunner::RunnerContext &context, const KRunner::QueryMatch &match) {
@@ -108,6 +116,7 @@ KRunner::QueryMatch KRunnerTranslator::generateTranslationMatch(const QString &p
     translationMatch.setText(result);
     translationMatch.setSubtext(QStringLiteral("From ").append(provider));
     translationMatch.setMatchCategory(QStringLiteral("Translation"));
+    translationMatch.setMultiLine(true);
     translationMatch.setRelevance(1); 
     
     return translationMatch;
@@ -120,6 +129,7 @@ KRunner::QueryMatch KRunnerTranslator::generatePlayAudioMatch(const QString &tex
     playAudioMatch.setText(text);
     playAudioMatch.setSubtext(QStringLiteral("Play audio of this text"));
     playAudioMatch.setMatchCategory(QStringLiteral("Play Audio"));
+    playAudioMatch.setMultiLine(true);
     playAudioMatch.setRelevance(1);
 
     return playAudioMatch;
@@ -128,6 +138,6 @@ KRunner::QueryMatch KRunnerTranslator::generatePlayAudioMatch(const QString &tex
 
 void KRunnerTranslator::reloadConfiguration() {}
 
-K_PLUGIN_CLASS_WITH_JSON(KRunnerTranslator, "translator.json")
+K_PLUGIN_CLASS_WITH_JSON(KRunnerTranslator, "krunnertranslator.json")
 
 #include "krunnertranslator.moc"
