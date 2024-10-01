@@ -63,7 +63,6 @@ bool DeeplAPI::webTranslate(const QPair<QString, QString> &languages, const QStr
             return true;
         }
     } else {
-
         qint64 statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
         qDebug() << "Krunner Translator: Deepl error";
         if (statusCode == 429) {
@@ -78,9 +77,7 @@ bool DeeplAPI::webTranslate(const QPair<QString, QString> &languages, const QStr
 
 QJsonObject DeeplAPI::initJsonRPC(const QString &sourceLanguage, const QString &targetLanguage, const QString &text) {
 
-    qint64 id = QRandomGenerator(QDateTime::currentSecsSinceEpoch()).bounded(0, 99999) + 8300000;
-    id *= 1000;
-    QJsonObject postData, params, lang, commonJobParams, txt;
+    QJsonObject postData, params, lang, txt;
     QJsonArray txtArray;
 
     txt = {
@@ -111,6 +108,9 @@ QJsonObject DeeplAPI::initJsonRPC(const QString &sourceLanguage, const QString &
         {QStringLiteral("timestamp"), timestamp},
 
     };
+
+    qint64 id = QRandomGenerator(QDateTime::currentSecsSinceEpoch()).bounded(0, 99999) + 8300000;
+    id *= 1000;
     
     postData = {
         {QStringLiteral("jsonrpc"), QStringLiteral("2.0")},
