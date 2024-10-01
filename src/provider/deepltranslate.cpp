@@ -24,8 +24,12 @@ bool DeeplTranslate::translate(const QPair<QString, QString> &languages, const Q
     if (languages.first.isEmpty()) {
         return false;
     }
-    if (supportLanguage(languages.first) && supportLanguage(languages.second)) {
-        return DeeplAPI::webTranslate(languages, text, result);
+    // for Norwegian: no -> nb
+    QPair<QString, QString> lang;
+    lang.first = languages.first == QStringLiteral("no") ? QStringLiteral("nb") : languages.first;
+    lang.second = languages.second == QStringLiteral("no") ? QStringLiteral("nb") : languages.second;
+    if (supportLanguage(lang.first) && supportLanguage(lang.second)) {
+        return DeeplAPI::webTranslate(lang, text, result);
     } else {
         return false;
     }
