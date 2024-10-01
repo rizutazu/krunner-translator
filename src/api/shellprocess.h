@@ -16,13 +16,13 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#ifndef TRANSLATESHELLPROCESS_H
-#define TRANSLATESHELLPROCESS_H
+#ifndef SHELLPROCESS_H
+#define SHELLPROCESS_H
 
 #include <QProcess>
 #include <QString>
 
-class TranslateShellProcess {
+class ShellProcess {
 
 public:
     // QString translate(const QString &language, const QString &text);
@@ -30,7 +30,7 @@ public:
     static bool bingTranslate(const QPair<QString, QString> &language, const QString &text, QString &result);
     static void playAudio(const QString &text, const QString &language);
 private:
-    static bool translate(const QString &engine, const QPair<QString, QString> &language, const QString &text, QString &result);
+    static bool translateShellTranslate(const QString &engine, const QPair<QString, QString> &language, const QString &text, QString &result);
 };
 
-#endif //TRANSLATESHELLPROCESS_H
+#endif //SHELLPROCESS_H

@@ -16,10 +16,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#include "translateshellprocess.h"
+#include "shellprocess.h"
 #include <QTextStream>
 
-void TranslateShellProcess::playAudio(const QString &text, const QString &language) {
+void ShellProcess::playAudio(const QString &text, const QString &language) {
     QStringList arguments;
     arguments << language + QStringLiteral(":") 
               << QStringLiteral("-speak")
@@ -33,7 +33,7 @@ void TranslateShellProcess::playAudio(const QString &text, const QString &langua
 }
 
 
-bool TranslateShellProcess::translate(const QString &engine, const QPair<QString, QString> &languages, const QString &text, QString &result) {
+bool ShellProcess::translateShellTranslate(const QString &engine, const QPair<QString, QString> &languages, const QString &text, QString &result) {
     QStringList arguments;
     arguments << languages.first + QStringLiteral(":") + languages.second
               << text
@@ -48,7 +48,9 @@ bool TranslateShellProcess::translate(const QString &engine, const QPair<QString
         process.waitForFinished();
         if (process.exitStatus() == QProcess::NormalExit) { // exit status 0
             QTextStream txtStream(&process);
-            result = txtStream.readLine();
+            result = txtStream.readAll().replace(QStringLiteral("\\n"), QStringLiteral("\n"));
+            // use readAll() to read outputs from engines like google translate, which contain new line character
+            // replace printable "\\n" with actual new line character
             return true;
         }
         return false;
@@ -57,10 +59,10 @@ bool TranslateShellProcess::translate(const QString &engine, const QPair<QString
 }
 
 
-bool TranslateShellProcess::googleTranslate(const QPair<QString, QString> &languages, const QString &text, QString &result) {
-    return TranslateShellProcess::translate(QStringLiteral("google"), languages, text, result);    
+bool ShellProcess::googleTranslate(const QPair<QString, QString> &languages, const QString &text, QString &result) {
+    return ShellProcess::translateShellTranslate(QStringLiteral("google"), languages, text, result);    
 }
 
-bool TranslateShellProcess::bingTranslate(const QPair<QString, QString> &languages, const QString &text, QString &result) {
-    return TranslateShellProcess::translate(QStringLiteral("bing"), languages, text, result);
+bool ShellProcess::bingTranslate(const QPair<QString, QString> &languages, const QString &text, QString &result) {
+    return ShellProcess::translateShellTranslate(QStringLiteral("bing"), languages, text, result);
 }

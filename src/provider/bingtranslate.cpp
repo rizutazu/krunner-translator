@@ -1,10 +1,10 @@
 #include "bingtranslate.h"
-#include "translateshellprocess.h"
+#include "shellprocess.h"
 
 const QString BingTranslate::getProviderName() {
     return QStringLiteral("Bing Translate");
 }
 
 bool BingTranslate::translate(const QPair<QString, QString> &languages, const QString &text, QString &result) {
-    return TranslateShellProcess::bingTranslate(languages, text, result);
+    return ShellProcess::bingTranslate(languages, text, result);
 }
