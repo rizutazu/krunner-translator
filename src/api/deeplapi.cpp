@@ -10,7 +10,7 @@
 //    && https://github.com/guobao2333/DeepLX-Serverless/blob/main/translate.js
 bool DeeplAPI::webTranslate(const QPair<QString, QString> &languages, const QString &text, QString &result) {
 
-    QJsonObject postData = initJsonRPC(languages.first.toUpper(), languages.second.toUpper(), text);
+    QJsonObject postData = DeeplAPI::initJsonRPC(languages.first.toUpper(), languages.second.toUpper(), text);
     qint64 id = postData[QStringLiteral("id")].toInteger();
 
     QString jsonString = QString::fromUtf8(QJsonDocument(postData).toJson(QJsonDocument::Compact).data());
@@ -50,7 +50,7 @@ bool DeeplAPI::webTranslate(const QPair<QString, QString> &languages, const QStr
         //     qDebug() << "Header: " << header.toStdString() << ": " << reply->rawHeader(header).toStdString();
         // }
         QJsonDocument responseContent = QJsonDocument::fromJson(reply->readAll());
-        // qDebug() << "Deepl: server reply: " << QString::fromUtf8(contents.toJson(QJsonDocument::Compact).data());
+        // qDebug() << "Deepl: server reply: " << QString::fromUtf8(responseContent.toJson(QJsonDocument::Compact).data());
         QString translation = responseContent.object()[QStringLiteral("result")]
             .toObject()[QStringLiteral("texts")]
             .toArray()[0]

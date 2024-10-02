@@ -73,7 +73,7 @@ void KRunnerTranslator::match(KRunner::RunnerContext &context) {
                 if (engine->getProviderName() == QStringLiteral("Google Translate")) { // for google translate only: add play audio
                     context.addMatch(generatePlayAudioMatch(result, languages.second)); 
                     // play audio for target text
-                    if (languages.first != QStringLiteral("")) {
+                    if (!languages.first.isEmpty()) {
                         context.addMatch(generatePlayAudioMatch(text, languages.first)); 
                         // when source language is provided, you can play source text as well
                     }

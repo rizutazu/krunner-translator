@@ -149,6 +149,9 @@ void LanguageRepository::addSupportedLanguage(SupportedLanguage supportedLanguag
 // }
 
 bool LanguageRepository::containsAbbreviation(QString abbreviation) {
+    if (abbreviation.isEmpty()) {
+        return false;
+    }
     for (auto language: *supportedLanguages) {
         if (language.getAbbreviation() == abbreviation)
             return true;

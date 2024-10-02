@@ -28,8 +28,8 @@ void ShellProcess::playAudio(const QString &text, const QString &language) {
     QProcess process;
     process.setProgram(QStringLiteral("trans"));
     process.setArguments(arguments);
-    process.startDetached(nullptr);
     process.setStandardOutputFile(QProcess::nullDevice());
+    process.startDetached(nullptr);
 }
 
 
