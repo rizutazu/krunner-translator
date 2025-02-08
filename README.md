@@ -45,7 +45,6 @@ Example:
 - Since Deepl translate does not ~~support~~ implement auto-detect source language, you must use the second input scheme to get its result if you want.
   - Todo: implement auto language detect
 - Deepl translate result may be frequently unavailable due to its rate limit.
-  - Hint: You can type `source_abbr sentence` first, after you've finished it, add `:target_abb`. This can avoid unnecessary incomplete API query.
 
 ## Installation
 

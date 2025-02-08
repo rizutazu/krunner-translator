@@ -22,7 +22,7 @@
 #include <QIcon>
 #include <QDebug>
 #include <QThreadPool>
-#include <KRunner/Action>
+#include <QThread>
 #include "googletranslate.h"
 #include "bingtranslate.h"
 #include "deepltranslate.h"
@@ -53,8 +53,8 @@ void KRunnerTranslator::match(KRunner::RunnerContext &context) {
     QPair<QString, QString> languages;
 
     // qDebug() << "New query: " << term.toStdString() << "\n";
-
     if (!parseTerm(term, text, languages)) return;
+    QThread::sleep(std::chrono::nanoseconds(5 * 1000000));  // sleep for 0.5s to avoid incomplete input
     if (!context.isValid()) return;
 
     // qDebug() << "Parse ok, lang: " << languages.first << ":" << languages.second << " text: " << text << "\n";

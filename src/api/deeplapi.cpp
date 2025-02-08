@@ -73,19 +73,19 @@ QNetworkReply *DeeplAPI::makeRequest(const QJsonObject &postData, const QString 
 QNetworkReply *DeeplAPI::splitText(const QString &text) {
 
     QJsonObject postData = {
-    {QStringLiteral("jsonrpc"), QStringLiteral("2.0")},
-    {QStringLiteral("method"), QStringLiteral("LMT_split_text")},
-    {QStringLiteral("id"), getRandomID()},
-    {QStringLiteral("params"), QJsonObject {
-        {QStringLiteral("commonJobParams"), QJsonObject {
-            {QStringLiteral("mode"), QStringLiteral("translate")},
+        {QStringLiteral("jsonrpc"), QStringLiteral("2.0")},
+        {QStringLiteral("method"), QStringLiteral("LMT_split_text")},
+        {QStringLiteral("id"), getRandomID()},
+        {QStringLiteral("params"), QJsonObject {
+            {QStringLiteral("commonJobParams"), QJsonObject {
+                {QStringLiteral("mode"), QStringLiteral("translate")},
             }},
-        {QStringLiteral("lang"), QJsonObject {
-            {QStringLiteral("lang_user_selected"), QStringLiteral("auto")},
+            {QStringLiteral("lang"), QJsonObject {
+                {QStringLiteral("lang_user_selected"), QStringLiteral("auto")},
             }},
-        {QStringLiteral("texts"), QJsonArray {text}},
-        {QStringLiteral("textType"), QStringLiteral("plaintext")},
-        {QStringLiteral("timestamp"), 0}
+            {QStringLiteral("texts"), QJsonArray {text}},
+            {QStringLiteral("textType"), QStringLiteral("plaintext")},
+            {QStringLiteral("timestamp"), 0}
         }}
     };
 
@@ -97,11 +97,11 @@ bool DeeplAPI::webTranslate(const QPair<QString, QString> &languages, const QStr
     QNetworkReply *splitReply = splitText(text);
     if (splitReply->error() == QNetworkReply::NoError) {
 
-        qDebug() << "split response ok";
+        // qDebug() << "split response ok";
 
         QJsonDocument responseContent = QJsonDocument::fromJson(splitReply->readAll());
 
-        qDebug() << "response: " << responseContent;
+        // qDebug() << "response: " << responseContent;
 
         QJsonArray chunks = responseContent
             .object()[QStringLiteral("result")]
@@ -112,7 +112,7 @@ bool DeeplAPI::webTranslate(const QPair<QString, QString> &languages, const QStr
 
         QJsonArray jobs;
 
-        qDebug() << "chunks size" << chunks.size();
+        // qDebug() << "chunks size" << chunks.size();
 
         for (int i = 0; i < chunks.size(); i++) {
             auto sentence = chunks[i]
@@ -137,14 +137,13 @@ bool DeeplAPI::webTranslate(const QPair<QString, QString> &languages, const QStr
             jobs.append(QJsonObject {
                 {QStringLiteral("kind"), QStringLiteral("default")},
                 {QStringLiteral("preferred_num_beams"), 4},
-                {QStringLiteral("raw_en_context_before"), QJsonArray{contextBefore}},
-                {QStringLiteral("raw_en_context_after"), QJsonArray{contextAfter}},
-                {QStringLiteral("sentences"), QJsonArray {QJsonObject {
-                        {QStringLiteral("prefix"), sentence[QStringLiteral("prefix")].toString()},
-                        {QStringLiteral("text"), sentence[QStringLiteral("text")].toString()},
-                        {QStringLiteral("id"), i + 1}
-                    }}
-                }
+                {QStringLiteral("raw_en_context_before"), QJsonArray {contextBefore}},
+                {QStringLiteral("raw_en_context_after"), QJsonArray {contextAfter}},
+                {QStringLiteral("sentences"), QJsonArray { QJsonObject {
+                    {QStringLiteral("prefix"), sentence[QStringLiteral("prefix")].toString()},
+                    {QStringLiteral("text"), sentence[QStringLiteral("text")].toString()},
+                    {QStringLiteral("id"), i + 1}
+                }}}
             });
         }
 
@@ -156,15 +155,15 @@ bool DeeplAPI::webTranslate(const QPair<QString, QString> &languages, const QStr
                 {QStringLiteral("commonJobParams"), QJsonObject {
                     {QStringLiteral("mode"), QStringLiteral("translate")},
                     // {QStringLiteral("regionalVariant"), QString()},
-                    }},
+                }},
                 {QStringLiteral("lang"), QJsonObject {
                     {QStringLiteral("source_lang_computed"), languages.first.toUpper()},
                     {QStringLiteral("target_lang"), languages.second.toUpper()},
-                    }},
+                }},
                 {QStringLiteral("jobs"), jobs},
                 {QStringLiteral("priority"), 1},
                 {QStringLiteral("timestamp"), generateTimestamp(text)},
-                }}
+            }}
         };
 
         QNetworkReply *translateReply = makeRequest(postData, QStringLiteral("LMT_handle_jobs"));
