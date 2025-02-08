@@ -2,7 +2,7 @@
 #include "shellprocess.h"
 
 const QString GoogleTranslate::getProviderName() {
-    return QStringLiteral("Google Translate");
+    return QStringLiteral("Google");
 }
 
 bool GoogleTranslate::translate(const QPair<QString, QString> &languages, const QString &text, QString &result) {

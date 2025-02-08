@@ -19,13 +19,8 @@
 #include "krunnertranslator.h"
 #include <QApplication>
 #include <QClipboard>
-// #include <QAction>
-// #include <KConfigCore/KConfig>
-// #include <QThread>
 #include <QIcon>
 #include <QDebug>
-// #include <QList>
-// #include <QtConcurrent>
 #include <QThreadPool>
 #include <KRunner/Action>
 #include "googletranslate.h"
@@ -70,7 +65,7 @@ void KRunnerTranslator::match(KRunner::RunnerContext &context) {
             QString result;
             if (engine->translate(languages, text, result)) { // translate ok
                 context.addMatch(generateTranslationMatch(engine->getProviderName(), result)); // add translation result
-                if (engine->getProviderName() == QStringLiteral("Google Translate")) { // for google translate only: add play audio
+                if (engine->getProviderName() == QStringLiteral("Google")) { // for google translate only: add play audio
                     context.addMatch(generatePlayAudioMatch(result, languages.second)); 
                     // play audio for target text
                     if (!languages.first.isEmpty()) {

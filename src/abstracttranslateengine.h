@@ -3,11 +3,9 @@
 #define ABSTRACTTRANSLATEENGINE_H
 
 #include <QString>
-#include <QPair>
 
 // AbstractTranslateEngine defines translator interface
 class AbstractTranslateEngine {
-
 public:
     AbstractTranslateEngine() {};
     virtual ~AbstractTranslateEngine() {};

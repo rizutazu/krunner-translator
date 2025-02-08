@@ -12,7 +12,7 @@ DeeplTranslate::DeeplTranslate() {
 }
 
 const QString DeeplTranslate::getProviderName() {
-    return QStringLiteral("Deepl Translate");
+    return QStringLiteral("Deepl");
 }
 
 bool DeeplTranslate::supportLanguage(const QString &language) {
@@ -29,7 +29,10 @@ bool DeeplTranslate::translate(const QPair<QString, QString> &languages, const Q
     lang.first = languages.first == QStringLiteral("no") ? QStringLiteral("nb") : languages.first;
     lang.second = languages.second == QStringLiteral("no") ? QStringLiteral("nb") : languages.second;
     if (supportLanguage(lang.first) && supportLanguage(lang.second)) {
-        return DeeplAPI::webTranslate(lang, text, result);
+        QString text_replaced = text;
+        text_replaced.replace(QStringLiteral("\n"), QStringLiteral(" "));
+        // idk why
+        return api.webTranslate(lang, text_replaced, result);
     } else {
         return false;
     }

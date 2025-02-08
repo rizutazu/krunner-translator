@@ -3,6 +3,9 @@
 
 #include "abstracttranslateengine.h"
 #include <QList>
+
+#include "deeplapi.h"
+
 class DeeplTranslate : public AbstractTranslateEngine {
 
 public:
@@ -13,6 +16,7 @@ public:
 
 private:
     bool supportLanguage(const QString &language);
+    DeeplAPI api;
     QList<QString> supportedLanguages;
 };
 
