@@ -42,8 +42,10 @@ Example:
 **Notice:**
 
 - You cannot play audio of the *input text* (not *translation*) if you don't specify the source language, like picture shown above.
-- Since Deepl translate does not support auto detect language, you must use the second input scheme to get its result if you want.
+- Since Deepl translate does not ~~support~~ implement auto-detect source language, you must use the second input scheme to get its result if you want.
+  - Todo: implement auto language detect
 - Deepl translate result may be frequently unavailable due to its rate limit.
+  - Hint: You can type `source_abbr sentence` first, after you've finished it, add `:target_abb`. This can avoid unnecessary incomplete API query.
 
 ## Installation
 
