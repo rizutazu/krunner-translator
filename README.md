@@ -8,15 +8,11 @@ This plugin is derived from [this project](https://github.com/naraesk/krunner-tr
 
 - Translate text
 
-Supported engine: `Google Translate`, `Bing Translate`, `Deepl Web Translate` 
-
 - Play audio for the text
 
-<img src="assets/image-20241001123726703.png" alt="image-20241001123726703" style="zoom:50%;" />
+Supported engine: `Google Translate`, `Bing Translate`, `Deepl Web Translate` 
 
-By clicking `Translation` results, their corresponding texts will be copied to clipboard.
-
-By clicking `Play Audio` results, their corresponding audio will be played in the background.
+<img src="assets/image-20250208184026016.png" alt="image-20250208184026016" style="zoom: 50%;" />
 
 ## Usage
 
@@ -40,15 +36,13 @@ Example:
 
 
 **Notice:**
-
-- You cannot play audio of the *input text* (not *translation*) if you don't specify the source language, like picture shown above.
+- You cannot play the audio of the *input text* if you don't specify the source language.
 - Since Deepl translate does not ~~support~~ implement auto-detect source language, you must use the second input scheme to get its result if you want.
-  - Todo: implement auto language detect
 - Deepl translate result may be frequently unavailable due to its rate limit.
 
 ## Installation
 
-1. Install [Translate Shell](https://github.com/soimort/translate-shell)
+1. Install [Translate Shell](https://github.com/soimort/translate-shell), follow its guide if you encounter audio play problem.
 2. make sure `cmake` / `KDE6` / `Qt6` developing environment is prepared.
 3. Run `./install.sh`
 

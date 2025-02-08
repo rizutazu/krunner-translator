@@ -10,12 +10,12 @@
 // reference: https://github.com/OwO-Network/DeepLX/blob/main/translate/translate.go
 
 qint64 DeeplAPI::getRandomID() {
-    qint64 id = QRandomGenerator(QDateTime::currentSecsSinceEpoch()).bounded(0, 99999) + 8300000;
+    const qint64 id = QRandomGenerator(QDateTime::currentSecsSinceEpoch()).bounded(0, 99999) + 8300000;
     return id * 1000;
 }
 
 QString DeeplAPI::formatPostData(const QJsonObject &postData) {
-    qint64 id = postData[QStringLiteral("id")].toInteger();
+    const qint64 id = postData[QStringLiteral("id")].toInteger();
     QString jsonString = QString::fromUtf8(QJsonDocument(postData).toJson(QJsonDocument::Compact).data());
     if (id + 5 % 29 == 0 || id + 3 % 13 == 0) {
         jsonString = jsonString.replace(QStringLiteral("\"method\":\""), QStringLiteral("\"method\" : \""));
@@ -28,7 +28,7 @@ QString DeeplAPI::formatPostData(const QJsonObject &postData) {
 qint64 DeeplAPI::generateTimestamp(const QString &text) {
     qint64 timestamp;
     qint64 time = QDateTime::currentMSecsSinceEpoch();
-    qint64 icount = (qint64)text.count(QStringLiteral("i"));
+    qint64 icount = text.count(QStringLiteral("i"));
     if (icount != 0) {
         icount++;
         timestamp = time - time % icount + icount;
@@ -110,6 +110,19 @@ bool DeeplAPI::webTranslate(const QPair<QString, QString> &languages, const QStr
             .toObject()[QStringLiteral("chunks")]
             .toArray();
 
+        QString sourceLangDetected = responseContent
+            .object()[QStringLiteral("result")]
+            .toObject()[QStringLiteral("lang")]
+            .toObject()[QStringLiteral("detected")]
+            .toString();
+
+        if (sourceLangDetected == QStringLiteral("unsupported") && languages.first.isEmpty()) {
+            splitReply->deleteLater();
+            return false;
+        }
+
+        // qDebug() << "Deepl: detected lang" << sourceLangDetected;
+
         QJsonArray jobs;
 
         // qDebug() << "chunks size" << chunks.size();
@@ -157,7 +170,7 @@ bool DeeplAPI::webTranslate(const QPair<QString, QString> &languages, const QStr
                     // {QStringLiteral("regionalVariant"), QString()},
                 }},
                 {QStringLiteral("lang"), QJsonObject {
-                    {QStringLiteral("source_lang_computed"), languages.first.toUpper()},
+                    {QStringLiteral("source_lang_computed"), languages.first.isEmpty() ? sourceLangDetected : languages.first.toUpper()},
                     {QStringLiteral("target_lang"), languages.second.toUpper()},
                 }},
                 {QStringLiteral("jobs"), jobs},
@@ -198,15 +211,15 @@ bool DeeplAPI::webTranslate(const QPair<QString, QString> &languages, const QStr
                 return true;
             }
         } else {
-            // qint64 statusCode = translateReply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-            // qDebug() << "Deepl handle jobs" << statusCode;
+            qint64 statusCode = translateReply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+            qDebug() << "Deepl handle jobs statusCode" << statusCode;
             translateReply->deleteLater();
             splitReply->deleteLater();
             return false;
         }
     } else {
-        // qint64 statusCode = splitReply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-        // qDebug() << "Deepl split text" << statusCode;
+        qint64 statusCode = splitReply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+        qDebug() << "Deepl split text statusCode" << statusCode;
         splitReply->deleteLater();
         return false;
     }

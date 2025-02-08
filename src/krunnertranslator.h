@@ -19,11 +19,14 @@
 #ifndef TRANSLATOR_H
 #define TRANSLATOR_H
 
-#include <KRunner/AbstractRunner>
-#include <QList>
 #include "languagerepository.h"
 #include "abstracttranslateengine.h"
-#include <QPair>
+#include <KRunner/AbstractRunner>
+#include <QList>
+#include <QIcon>
+#include <KRunner/Action>
+
+
 
 class KRunnerTranslator : public KRunner::AbstractRunner
 {
@@ -39,15 +42,18 @@ public:
 private:
     bool parseTerm(const QString &term, QString &text, QPair<QString, QString> &languages);
 
-    KRunner::QueryMatch generateTranslationMatch(const QString &provider, const QString &result);
+    KRunner::QueryMatch generateTranslationMatch(const QString &provider, const QString &result, const QString &language);
     // Translation match should have a provider mark
 
-    KRunner::QueryMatch generatePlayAudioMatch(const QString &text, const QString &language);
+    // KRunner::QueryMatch generatePlayAudioMatch(const QString &text, const QString &language);
     // play audio for text, need to specify language
 
     LanguageRepository languageRepository;
 
     QList<AbstractTranslateEngine*> engines;
+
+    static KRunner::Action copyAction;
+    static KRunner::Action playAction;
 };
 
 #endif

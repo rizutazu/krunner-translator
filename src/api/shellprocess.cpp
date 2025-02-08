@@ -42,7 +42,7 @@ bool ShellProcess::translateShellTranslate(const QString &engine, const QPair<QS
               << engine;
 
     QProcess process;
-    process.start(QString::fromStdString("trans"), arguments);
+    process.start(QStringLiteral("trans"), arguments);
 
     if (process.waitForStarted()) { // if command failed to start
         process.waitForFinished();

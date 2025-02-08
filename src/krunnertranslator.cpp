@@ -17,16 +17,18 @@
  *****************************************************************************/
 
 #include "krunnertranslator.h"
-#include <QApplication>
-#include <QClipboard>
-#include <QIcon>
-#include <QDebug>
-#include <QThreadPool>
-#include <QThread>
 #include "googletranslate.h"
 #include "bingtranslate.h"
 #include "deepltranslate.h"
 #include "shellprocess.h"
+#include <QApplication>
+#include <QClipboard>
+#include <QDebug>
+#include <QThreadPool>
+#include <QThread>
+
+KRunner::Action KRunnerTranslator::copyAction = KRunner::Action(QStringLiteral("copy"), QStringLiteral("edit-copy"), QStringLiteral("Copy to clipboard"));
+KRunner::Action KRunnerTranslator::playAction = KRunner::Action(QStringLiteral("play"), QStringLiteral("media-play"), QStringLiteral("Play audio"));
 
 KRunnerTranslator::KRunnerTranslator(QObject *parent, const KPluginMetaData &metaData)
         : KRunner::AbstractRunner(parent, metaData) {
@@ -64,17 +66,13 @@ void KRunnerTranslator::match(KRunner::RunnerContext &context) {
         // because `engine++;` at each loop end will change corresponding variable in running thread
             QString result;
             if (engine->translate(languages, text, result)) { // translate ok
-                context.addMatch(generateTranslationMatch(engine->getProviderName(), result)); // add translation result
-                if (engine->getProviderName() == QStringLiteral("Google")) { // for google translate only: add play audio
-                    context.addMatch(generatePlayAudioMatch(result, languages.second)); 
-                    // play audio for target text
-                    if (!languages.first.isEmpty()) {
-                        context.addMatch(generatePlayAudioMatch(text, languages.first)); 
-                        // when source language is provided, you can play source text as well
-                    }
-                }
+                context.addMatch(generateTranslationMatch(engine->getProviderName(), result, languages.second)); // add translation result
             }  
         });
+    }
+    if (!languages.first.isEmpty()) {
+        context.addMatch(generateTranslationMatch(QStringLiteral("Input text") , text, languages.first)); 
+        // when source language is provided, you can play source text as well
     }
     QThreadPool::globalInstance()->waitForDone();
 }
@@ -82,12 +80,14 @@ void KRunnerTranslator::match(KRunner::RunnerContext &context) {
 void KRunnerTranslator::run(const KRunner::RunnerContext &context, const KRunner::QueryMatch &match) {
     Q_UNUSED(context);
     QString category = match.matchCategory();
-    if (category == QStringLiteral("Translation")) {
-        QApplication::clipboard()->setText(match.text());
-    } else if (category == QStringLiteral("Play Audio")) {
+    if (category == QStringLiteral("Play Audio")) {
         ShellProcess::playAudio(match.text(), match.data().toString());
-    } else {
-        qDebug() << "Unknown query match category: " << category.toStdString() << "\n";
+        return;
+    }
+    if (match.selectedAction().id() == QStringLiteral("copy")) {
+        QApplication::clipboard()->setText(match.text());
+    } else if (match.selectedAction().id() == QStringLiteral("play")) {
+        ShellProcess::playAudio(match.text(), match.data().toString());
     }
     
 }
@@ -98,7 +98,7 @@ bool KRunnerTranslator::parseTerm(const QString &term, QString &text, QPair<QStr
     // language.first == abbr-src, language.second == abbr-dest
 
     // first: find space at middle
-    const int indexSpace = term.indexOf(QStringLiteral(" "));
+    const qint64 indexSpace = term.indexOf(QStringLiteral(" "));
     if (indexSpace == -1) return false;
 
     // then, at space right is text-to-translate
@@ -112,11 +112,11 @@ bool KRunnerTranslator::parseTerm(const QString &term, QString &text, QPair<QStr
 
     // at space left is abbrs
     const QString abbrs = term.first(indexSpace);
-    const int indexColon = abbrs.indexOf(QStringLiteral(":"));
+    const qint64 indexColon = abbrs.indexOf(QStringLiteral(":"));
 
     if (indexColon == -1) { // destination language only
         if (languageRepository.containsAbbreviation(abbrs)) {
-            languages.first = QStringLiteral("");
+            languages.first = QString();
             languages.second = abbrs;
             return true;
         } else {
@@ -136,32 +136,35 @@ bool KRunnerTranslator::parseTerm(const QString &term, QString &text, QPair<QStr
     }
 }
 
-KRunner::QueryMatch KRunnerTranslator::generateTranslationMatch(const QString &provider, const QString &result) {
+KRunner::QueryMatch KRunnerTranslator::generateTranslationMatch(const QString &provider, const QString &result, const QString &language) {
     KRunner::QueryMatch translationMatch(this);
 
     translationMatch.setIcon(QIcon::fromTheme(QStringLiteral("applications-education-language")));
     translationMatch.setText(result);
     translationMatch.setSubtext(provider);
     translationMatch.setMatchCategory(QStringLiteral("Translation"));
+    translationMatch.setData(language);
     translationMatch.setMultiLine(true);
     translationMatch.setRelevance(1);
+    translationMatch.addAction(copyAction);
+    translationMatch.addAction(playAction);
     
     return translationMatch;
 }
 
-KRunner::QueryMatch KRunnerTranslator::generatePlayAudioMatch(const QString &text, const QString &language) {
-    KRunner::QueryMatch playAudioMatch(this);
+// KRunner::QueryMatch KRunnerTranslator::generatePlayAudioMatch(const QString &text, const QString &language) {
+//     KRunner::QueryMatch playAudioMatch(this);
 
-    playAudioMatch.setIcon(QIcon::fromTheme(QStringLiteral("media-play")));
-    playAudioMatch.setText(text);
-    playAudioMatch.setSubtext(language + QStringLiteral(" text"));
-    playAudioMatch.setMatchCategory(QStringLiteral("Play Audio"));
-    playAudioMatch.setData(language);
-    // playAudioMatch.setMultiLine(true);
-    playAudioMatch.setRelevance(1);
+//     playAudioMatch.setIcon(QIcon::fromTheme(QStringLiteral("media-play")));
+//     playAudioMatch.setText(text);
+//     playAudioMatch.setSubtext(QStringLiteral("Click to play"));
+//     playAudioMatch.setMatchCategory(QStringLiteral("Play Audio"));
+//     playAudioMatch.setData(language);
+//     // playAudioMatch.setMultiLine(true);
+//     playAudioMatch.setRelevance(1);
 
-    return playAudioMatch;
-}
+//     return playAudioMatch;
+// }
 
 void KRunnerTranslator::reloadConfiguration() {}
 
