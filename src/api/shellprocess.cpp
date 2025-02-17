@@ -49,11 +49,13 @@ bool ShellProcess::translateShellTranslate(const QString &engine, const QPair<QS
         if (process.exitStatus() == QProcess::NormalExit) { // exit status 0
             QTextStream txtStream(&process);
             result = txtStream.readAll().replace(QStringLiteral("\\n"), QStringLiteral("\n"));
+            if (result.endsWith(QStringLiteral("\n"))) {
+                result.removeLast();
+            }
             // use readAll() to read outputs from engines like google translate, which contain new line character
             // replace printable "\\n" with actual new line character
             return true;
         }
-        return false;
     }
     return false;
 }

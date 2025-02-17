@@ -71,24 +71,28 @@ void KRunnerTranslator::match(KRunner::RunnerContext &context) {
         });
     }
     if (!languages.first.isEmpty()) {
-        context.addMatch(generateTranslationMatch(QStringLiteral("Input text") , text, languages.first)); 
         // when source language is provided, you can play source text as well
+        auto match = generateTranslationMatch(QStringLiteral("Input text") , text, languages.first);
+        // reduce relevance 
+        match.setRelevance(0);  
+        match.setSubtext(QString());
+        match.setMatchCategory(QStringLiteral("Input text"));
+        context.addMatch(match); 
+        
     }
     QThreadPool::globalInstance()->waitForDone();
 }
 
 void KRunnerTranslator::run(const KRunner::RunnerContext &context, const KRunner::QueryMatch &match) {
     Q_UNUSED(context);
-    QString category = match.matchCategory();
-    if (category == QStringLiteral("Play Audio")) {
-        ShellProcess::playAudio(match.text(), match.data().toString());
-        return;
-    }
     if (match.selectedAction().id() == QStringLiteral("copy")) {
         QApplication::clipboard()->setText(match.text());
     } else if (match.selectedAction().id() == QStringLiteral("play")) {
         ShellProcess::playAudio(match.text(), match.data().toString());
     }
+
+    // User pressed Enter maybe
+    QApplication::clipboard()->setText(match.text());
     
 }
 
@@ -151,20 +155,6 @@ KRunner::QueryMatch KRunnerTranslator::generateTranslationMatch(const QString &p
     
     return translationMatch;
 }
-
-// KRunner::QueryMatch KRunnerTranslator::generatePlayAudioMatch(const QString &text, const QString &language) {
-//     KRunner::QueryMatch playAudioMatch(this);
-
-//     playAudioMatch.setIcon(QIcon::fromTheme(QStringLiteral("media-play")));
-//     playAudioMatch.setText(text);
-//     playAudioMatch.setSubtext(QStringLiteral("Click to play"));
-//     playAudioMatch.setMatchCategory(QStringLiteral("Play Audio"));
-//     playAudioMatch.setData(language);
-//     // playAudioMatch.setMultiLine(true);
-//     playAudioMatch.setRelevance(1);
-
-//     return playAudioMatch;
-// }
 
 void KRunnerTranslator::reloadConfiguration() {}
 
