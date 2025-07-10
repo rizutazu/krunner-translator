@@ -19,7 +19,7 @@ TranslatorConfig::TranslatorConfig(QObject *parent) : KCModule(parent) {
 
     // only show up address and key config when the box is checked
     connect(ui->libreCheckBox, &QCheckBox::checkStateChanged, this, [&](){
-        ui->libreFrame->setVisible(ui->libreCheckBox->isChecked());
+        ui->libreFrame->setEnabled(ui->libreCheckBox->isChecked());
     });
 
     connect(ui->tabs, &QTabWidget::currentChanged, this, [&]() {
@@ -63,7 +63,7 @@ void TranslatorConfig::load() {
     ui->libreAddr->setText(group.readEntry(CONFIG_LIBRE_ADDR, ""));
     ui->libreKey->setText(group.readEntry(CONFIG_LIBRE_KEY, ""));
 
-    ui->libreFrame->setVisible(ui->libreCheckBox->isChecked());
+    ui->libreFrame->setEnabled(ui->libreCheckBox->isChecked());
 
     ui->tabs->setCurrentIndex(group.readEntry(CONFIG_CURRENT_INDEX, 0));
 }
