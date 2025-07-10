@@ -11,4 +11,7 @@ const char CONFIG_LIBRE[] = "config_libre";
 const char CONFIG_LIBRE_ADDR[] = "config_libre_addr";
 const char CONFIG_LIBRE_KEY[] = "config_libre_key";
 
+// current tab index in configure menu
+const char CONFIG_CURRENT_INDEX[] = "config_current_index";
+
 #endif //CONFIGENTRY_H

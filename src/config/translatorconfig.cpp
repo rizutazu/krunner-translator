@@ -22,9 +22,15 @@ TranslatorConfig::TranslatorConfig(QObject *parent) : KCModule(parent) {
         ui->libreFrame->setVisible(ui->libreCheckBox->isChecked());
     });
 
+    connect(ui->tabs, &QTabWidget::currentChanged, this, [&]() {
+        KSharedConfig::Ptr config = KSharedConfig::openConfig(QStringLiteral("krunnerrc"));
+        KConfigGroup group = config->group(QStringLiteral("Runners")).group(QStringLiteral(KRUNNER_PLUGIN_NAME));
+        group.writeEntry(CONFIG_CURRENT_INDEX, ui->tabs->currentIndex());
+        group.sync();
+    });
+
 }
 
-TranslatorConfig::~TranslatorConfig() {}
 
 void TranslatorConfig::save() {
     KCModule::save();
@@ -58,6 +64,8 @@ void TranslatorConfig::load() {
     ui->libreKey->setText(group.readEntry(CONFIG_LIBRE_KEY, ""));
 
     ui->libreFrame->setVisible(ui->libreCheckBox->isChecked());
+
+    ui->tabs->setCurrentIndex(group.readEntry(CONFIG_CURRENT_INDEX, 0));
 }
 
 void TranslatorConfig::defaults() {

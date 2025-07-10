@@ -9,7 +9,7 @@ class TranslatorConfig: public KCModule {
     Q_OBJECT
 public:
     explicit TranslatorConfig(QObject *parent);
-    ~TranslatorConfig() override;
+    ~TranslatorConfig() override = default;
 
 public Q_SLOTS:
     void save() override;
