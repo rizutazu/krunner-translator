@@ -4,7 +4,6 @@
 #include <QJsonObject>
 #include <QtNetwork/QNetworkReply>
 class DeeplAPI {
-
 public:
     bool webTranslate(const QPair<QString, QString> &languages, const QString &text, QString &result);
 private:

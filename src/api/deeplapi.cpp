@@ -63,7 +63,7 @@ QNetworkReply *DeeplAPI::makeRequest(const QJsonObject &postData, const QString 
     // qDebug() << "post data: " << postData;
 
     QEventLoop loop;
-    QObject::connect(&mgr, &QNetworkAccessManager::finished, &loop, &QEventLoop::quit);
+    QEventLoop::connect(&mgr, &QNetworkAccessManager::finished, &loop, &QEventLoop::quit);
     QNetworkReply *reply = mgr.post(request, formatPostData(postData).toUtf8());
     loop.exec();
     return reply;

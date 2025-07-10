@@ -4,19 +4,20 @@
 #include "abstracttranslateengine.h"
 #include <QList>
 
-#include "deeplapi.h"
 
 class DeeplTranslate : public AbstractTranslateEngine {
 
 public:
     DeeplTranslate();
+    ~DeeplTranslate() override;
     const QString getProviderName() override;
     bool translate(const QPair<QString, QString> &languages, const QString &text, QString &result) override;
 
 private:
     bool supportLanguage(const QString &language);
-    DeeplAPI api;
     QList<QString> supportedLanguages;
+    class API;
+    API *api;
 };
 
 

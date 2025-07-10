@@ -16,10 +16,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#include "shellprocess.h"
+#include "translateshell.h"
 #include <QTextStream>
 
-void ShellProcess::playAudio(const QString &text, const QString &language) {
+void TranslateShell::playAudio(const QString &text, const QString &language) {
     QStringList arguments;
     arguments << language + QStringLiteral(":") 
               << QStringLiteral("-speak")
@@ -33,7 +33,7 @@ void ShellProcess::playAudio(const QString &text, const QString &language) {
 }
 
 
-bool ShellProcess::translateShellTranslate(const QString &engine, const QPair<QString, QString> &languages, const QString &text, QString &result) {
+bool TranslateShell::translate(const QString &engine, const QPair<QString, QString> &languages, const QString &text, QString &result) {
     QStringList arguments;
     arguments << languages.first + QStringLiteral(":") + languages.second
               << text
@@ -58,13 +58,4 @@ bool ShellProcess::translateShellTranslate(const QString &engine, const QPair<QS
         }
     }
     return false;
-}
-
-
-bool ShellProcess::googleTranslate(const QPair<QString, QString> &languages, const QString &text, QString &result) {
-    return ShellProcess::translateShellTranslate(QStringLiteral("google"), languages, text, result);    
-}
-
-bool ShellProcess::bingTranslate(const QPair<QString, QString> &languages, const QString &text, QString &result) {
-    return ShellProcess::translateShellTranslate(QStringLiteral("bing"), languages, text, result);
 }

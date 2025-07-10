@@ -1,6 +1,12 @@
 #include "deepltranslate.h"
 #include "deeplapi.h"
+
+// it sounds quite weird...
+class DeeplTranslate::API : public DeeplAPI {
+};
+
 DeeplTranslate::DeeplTranslate() {
+    api = new API();
     supportedLanguages = {QStringLiteral("ar"), QStringLiteral("bg"), QStringLiteral("cs"), 
         QStringLiteral("da"), QStringLiteral("de"), QStringLiteral("el"), QStringLiteral("en"), 
         QStringLiteral("es"), QStringLiteral("et"), QStringLiteral("fi"), QStringLiteral("fr"), 
@@ -9,6 +15,10 @@ DeeplTranslate::DeeplTranslate() {
         QStringLiteral("nl"), QStringLiteral("pl"), QStringLiteral("pt"), QStringLiteral("ro"), 
         QStringLiteral("ru"), QStringLiteral("sk"), QStringLiteral("sl"), QStringLiteral("sv"), 
         QStringLiteral("tr"), QStringLiteral("uk"), QStringLiteral("zh")};
+}
+
+DeeplTranslate::~DeeplTranslate() {
+    delete api;
 }
 
 const QString DeeplTranslate::getProviderName() {
@@ -32,7 +42,7 @@ bool DeeplTranslate::translate(const QPair<QString, QString> &languages, const Q
         QString text_replaced = text;
         text_replaced.replace(QStringLiteral("\n"), QStringLiteral(" "));
         // idk why
-        return api.webTranslate(lang, text_replaced, result);
+        return api->webTranslate(lang, text_replaced, result);
     } else {
         return false;
     }

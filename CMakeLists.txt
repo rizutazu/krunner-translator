@@ -38,16 +38,21 @@ target_link_libraries(kcm_krunner_translator
 
 set(krunner_translator_SRCS
         src/krunnertranslator.cpp src/krunnertranslator.h
+
         src/languagerepository.cpp src/languagerepository.h
         src/languages.cpp src/languages.h 
         src/supportedlanguages.h
-        src/api/shellprocess.cpp src/api/shellprocess.h
-        src/api/deeplapi.cpp src/api/deeplapi.h
+
+        src/api/deeplapi.h src/api/deeplapi.cpp
+        src/api/libretranslateapi.h src/api/libretranslateapi.cpp
+
         src/abstracttranslateengine.h
+        src/provider/translateshell.h src/provider/translateshell.cpp
         src/provider/googletranslate.h src/provider/googletranslate.cpp
         src/provider/bingtranslate.h src/provider/bingtranslate.cpp
         src/provider/deepltranslate.h src/provider/deepltranslate.cpp
         src/provider/libretranslate.h src/provider/libretranslate.cpp
+
         src/config/configentry.h
 )
 

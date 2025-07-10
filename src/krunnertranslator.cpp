@@ -22,7 +22,7 @@
 #include "deepltranslate.h"
 #include "libretranslate.h"
 #include "configentry.h"
-#include "shellprocess.h"
+#include "translateshell.h"
 #include <QApplication>
 #include <QClipboard>
 #include <QDebug>
@@ -85,7 +85,7 @@ void KRunnerTranslator::run(const KRunner::RunnerContext &context, const KRunner
     if (match.selectedAction().id() == QStringLiteral("copy")) {
         QApplication::clipboard()->setText(match.text());
     } else if (match.selectedAction().id() == QStringLiteral("play")) {
-        ShellProcess::playAudio(match.text(), match.data().toString());
+        TranslateShell::playAudio(match.text(), match.data().toString());
     }
 
     // User pressed Enter maybe
@@ -161,7 +161,6 @@ void KRunnerTranslator::reloadConfiguration() {
     engines.clear();
 
     KConfigGroup group = config();
-    qDebug() << group.entryMap();
     if (group.readEntry(CONFIG_GOOGLE, true)) {
         engines.append(new GoogleTranslate());
     }
@@ -172,8 +171,10 @@ void KRunnerTranslator::reloadConfiguration() {
         engines.append(new DeeplTranslate());
     }
     if (group.readEntry(CONFIG_LIBRE, false)) {
-        engines.append(new LibreTranslate());
-        // todo:
+        auto *t = new LibreTranslate();
+        t->setup(group.readEntry(CONFIG_LIBRE_ADDR, QString()),
+            group.readEntry(CONFIG_LIBRE_KEY, QString()));
+        engines.append(t);
     }
 
 }
