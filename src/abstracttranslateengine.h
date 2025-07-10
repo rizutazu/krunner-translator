@@ -8,10 +8,8 @@
 class AbstractTranslateEngine {
 public:
     AbstractTranslateEngine() {};
-    virtual ~AbstractTranslateEngine() {};
 
-    virtual void setAPIKey(const QString &key) = 0;
-    // set up translate api key if needed
+    virtual ~AbstractTranslateEngine() {};
 
     virtual const QString getProviderName() = 0;
     // get translate provider name, e.g Google Translate, Deepl Translate

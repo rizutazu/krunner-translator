@@ -13,10 +13,10 @@
         "Description": "Translates into any language",
         "EnabledByDefault": true,
         "Icon": "applications-education-language",
-        "Id": "KRunnerTranslator",
         "License": "GPL",
         "Name": "Translator",
         "Version": "0.0.3"
     },
-    "X-Plasma-AdvertiseSingleRunnerQueryMode": true
+    "X-Plasma-AdvertiseSingleRunnerQueryMode": true,
+    "X-KDE-ConfigModule": "kf6/krunner/kcms/kcm_krunner_translator"
 }

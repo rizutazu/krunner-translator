@@ -20,12 +20,15 @@
 #include "googletranslate.h"
 #include "bingtranslate.h"
 #include "deepltranslate.h"
+#include "libretranslate.h"
+#include "configentry.h"
 #include "shellprocess.h"
 #include <QApplication>
 #include <QClipboard>
 #include <QDebug>
 #include <QThreadPool>
 #include <QThread>
+#include <KConfigGroup>
 
 KRunner::Action KRunnerTranslator::copyAction = KRunner::Action(QStringLiteral("copy"), QStringLiteral("edit-copy"), QStringLiteral("Copy to clipboard"));
 KRunner::Action KRunnerTranslator::playAction = KRunner::Action(QStringLiteral("play"), QStringLiteral("media-play"), QStringLiteral("Play audio"));
@@ -34,12 +37,6 @@ KRunnerTranslator::KRunnerTranslator(QObject *parent, const KPluginMetaData &met
         : KRunner::AbstractRunner(parent, metaData) {
     languageRepository.initialize();
     // init language repo
-
-    engines.append(new GoogleTranslate());
-    engines.append(new BingTranslate());
-    engines.append(new DeeplTranslate());
-    // init engines
-    
 }
 
 KRunnerTranslator::~KRunnerTranslator() {
@@ -156,7 +153,30 @@ KRunner::QueryMatch KRunnerTranslator::generateTranslationMatch(const QString &p
     return translationMatch;
 }
 
-void KRunnerTranslator::reloadConfiguration() {}
+void KRunnerTranslator::reloadConfiguration() {
+
+    for (auto engine: engines) {
+        delete engine;
+    }
+    engines.clear();
+
+    KConfigGroup group = config();
+    qDebug() << group.entryMap();
+    if (group.readEntry(CONFIG_GOOGLE, true)) {
+        engines.append(new GoogleTranslate());
+    }
+    if (group.readEntry(CONFIG_BING, true)) {
+        engines.append(new BingTranslate());
+    }
+    if (group.readEntry(CONFIG_DEEPL, true)) {
+        engines.append(new DeeplTranslate());
+    }
+    if (group.readEntry(CONFIG_LIBRE, false)) {
+        engines.append(new LibreTranslate());
+        // todo:
+    }
+
+}
 
 K_PLUGIN_CLASS_WITH_JSON(KRunnerTranslator, "krunnertranslator.json")
 

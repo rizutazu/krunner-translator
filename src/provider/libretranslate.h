@@ -1,15 +1,17 @@
-#ifndef BINGTRANSLATOR_H
-#define BINGTRANSLATOR_H
+#ifndef LIBRETRANSLATE_H
+#define LIBRETRANSLATE_H
 
 #include "abstracttranslateengine.h"
 
-class BingTranslate : public AbstractTranslateEngine {
-
+class LibreTranslate: public AbstractTranslateEngine {
 public:
     const QString getProviderName() override;
+
     bool translate(const QPair<QString, QString> &languages, const QString &text, QString &result) override;
+
+    // todo: implement libre translate
 };
 
 
 
-#endif // BINGTRANSLATOR_H
+#endif //LIBRETRANSLATE_H
