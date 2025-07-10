@@ -11,7 +11,6 @@ public:
 
     bool translate(const QPair<QString, QString> &languages, const QString &text, QString &result) override;
     void setup(const QString &address, const QString &key);
-    // todo: implement libre translate
 private:
     QString address;
     QString key;
