@@ -19,22 +19,19 @@
 #ifndef LANGUAGEREPOSITORY_H
 #define LANGUAGEREPOSITORY_H
 
-#include "languages.h"
+#include "language.h"
+#include <QMap>
 
 class LanguageRepository {
 public:
-    void addSupportedLanguage(SupportedLanguage language, QString name, QString abbreviation);
+    void addLanguage(const Language &language);
 
-    void initialize();
+    bool containsAbbreviation(const QString &abbreviation) const;
 
-    // QList<class Language> getSupportedLanguages();
-
-    bool containsAbbreviation(QString abbreviation);
-
-    // QString getCombinedName(QString abbreviation);
+    bool getNameByAbbreviation(const QString &abbreviation, QString &name) const;
 
 private:
-    QMap<SupportedLanguage, Language> *supportedLanguages = new QMap<SupportedLanguage, Language>;
+    QMap<QString, const Language*> abbrMap;
 };
 
 #endif // LANGUAGEREPOSITORY_H

@@ -40,13 +40,10 @@ public:
     void reloadConfiguration() override;
 
 private:
-    bool parseTerm(const QString &term, QString &text, QPair<QString, QString> &languages);
+    static bool parseQuery(const QString &term, QString &text, QPair<QString, QString> &languages);
 
     KRunner::QueryMatch generateTranslationMatch(const QString &provider, const QString &result, const QString &language);
     // Translation match should have a provider mark
-
-    // KRunner::QueryMatch generatePlayAudioMatch(const QString &text, const QString &language);
-    // play audio for text, need to specify language
 
     LanguageRepository languageRepository;
 

@@ -17,11 +17,20 @@
  *****************************************************************************/
 
 #include "translateshell.h"
+#include "predefined.h"
 #include <QTextStream>
 
-void TranslateShell::playAudio(const QString &text, const QString &language) {
+LanguageRepository TranslateShell::repo;
+
+void TranslateShell::init() {
+    // enforce initialization order
+    Predefined::init();
+    AddTranslateShellSupportedLanguage(repo);
+}
+
+void TranslateShell::playAudio(const QString &text, const QString &abbreviation) {
     QStringList arguments;
-    arguments << language + QStringLiteral(":") 
+    arguments << abbreviation + QStringLiteral(":")
               << QStringLiteral("-speak")
             //   << QStringLiteral("-no-translate")
               << text;
@@ -32,10 +41,9 @@ void TranslateShell::playAudio(const QString &text, const QString &language) {
     process.startDetached(nullptr);
 }
 
-
-bool TranslateShell::translate(const QString &engine, const QPair<QString, QString> &languages, const QString &text, QString &result) {
+bool TranslateShell::translate(const QString &engine, const QPair<QString, QString> &abbreviations, const QString &text, QString &result) {
     QStringList arguments;
-    arguments << languages.first + QStringLiteral(":") + languages.second
+    arguments << abbreviations.first + QStringLiteral(":") + abbreviations.second
               << text
               << QStringLiteral("--brief")
               << QStringLiteral("-e")
@@ -58,4 +66,8 @@ bool TranslateShell::translate(const QString &engine, const QPair<QString, QStri
         }
     }
     return false;
+}
+
+bool TranslateShell::supportLanguage(const QString &abbreviation) {
+    return repo.containsAbbreviation(abbreviation);
 }

@@ -16,35 +16,19 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#ifndef LANGUAGES_H
-#define LANGUAGES_H
+#include "language.h"
 
+#include <utility>
 
-#include <QtCore/QString>
-#include <QtCore/QList>
-#include <QtCore/QVariant>
-#include "supportedlanguages.h"
+Language::Language(QString abbreviation, QString name) {
+    this->abbreviation = abbreviation;
+    this->name = name;
+}
 
-class Language {
+const QString &Language::getAbbreviation() const {
+    return abbreviation;
+}
 
-public:
-    Language() = default;
-
-    ~Language() = default;
-
-    Language(SupportedLanguage language, QString name, QString abbreviation);
-
-    Language(Language const &language) = default;
-
-    QString getCombinedName();
-
-    QString getAbbreviation();
-
-private:
-    QString name;
-    QString abbreviation;
-};
-
-Q_DECLARE_METATYPE(Language)
-
-#endif // LANGUAGES_H
+const QString &Language::getName() const {
+    return name;
+}

@@ -24,6 +24,11 @@ bool LibreTranslate::translate(const QPair<QString, QString> &languages, const Q
     return api->translate(address, key, languages, text, result);
 }
 
+bool LibreTranslate::supportLanguage(const QString &abbreviations) {
+    Q_UNUSED(abbreviations);
+    return true;
+}
+
 void LibreTranslate::setup(const QString &address, const QString &key) {
     this->address = address;
     this->key = key;

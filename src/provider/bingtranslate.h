@@ -7,7 +7,8 @@ class BingTranslate : public AbstractTranslateEngine {
 
 public:
     const QString getProviderName() override;
-    bool translate(const QPair<QString, QString> &languages, const QString &text, QString &result) override;
+    bool translate(const QPair<QString, QString> &abbreviations, const QString &text, QString &result) override;
+    bool supportLanguage(const QString &abbreviations) override;
 };
 
 

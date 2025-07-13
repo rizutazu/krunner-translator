@@ -8,8 +8,9 @@ public:
     explicit LibreTranslate();
     ~LibreTranslate() override;
     const QString getProviderName() override;
-
     bool translate(const QPair<QString, QString> &languages, const QString &text, QString &result) override;
+    bool supportLanguage(const QString &abbreviations) override;
+
     void setup(const QString &address, const QString &key);
 private:
     QString address;

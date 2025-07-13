@@ -34,9 +34,7 @@ KRunner::Action KRunnerTranslator::copyAction = KRunner::Action(QStringLiteral("
 KRunner::Action KRunnerTranslator::playAction = KRunner::Action(QStringLiteral("play"), QStringLiteral("media-play"), QStringLiteral("Play audio"));
 
 KRunnerTranslator::KRunnerTranslator(QObject *parent, const KPluginMetaData &metaData)
-        : KRunner::AbstractRunner(parent, metaData) {
-    languageRepository.initialize();
-    // init language repo
+        : AbstractRunner(parent, metaData) {
 }
 
 KRunnerTranslator::~KRunnerTranslator() {
@@ -47,29 +45,36 @@ KRunnerTranslator::~KRunnerTranslator() {
 
 void KRunnerTranslator::match(KRunner::RunnerContext &context) {
     
-    const QString term = context.query();
+    const QString query = context.query();
     QString text;
-    QPair<QString, QString> languages;
+    QPair<QString, QString> abbreviations;
 
     // qDebug() << "New query: " << term.toStdString() << "\n";
-    if (!parseTerm(term, text, languages)) return;
+    if (!parseQuery(query, text, abbreviations)) return;
     QThread::sleep(std::chrono::nanoseconds(5 * 1000000));  // sleep for 0.5s to avoid incomplete input
     if (!context.isValid()) return;
 
-    // qDebug() << "Parse ok, lang: " << languages.first << ":" << languages.second << " text: " << text << "\n";
+    // qDebug() << "Parse ok, lang: " << abbreviations.first << ":" << abbreviations.second << " text: " << text << "\n";
     for (auto engine : engines) {
-        QThreadPool::globalInstance()->start([&, engine](){ 
-        // variable `engine` should not be reference capture, 
+        // variable `engine` should not be reference capture,
         // because `engine++;` at each loop end will change corresponding variable in running thread
+        QThreadPool::globalInstance()->start([&, engine](){
+            if (!abbreviations.first.isEmpty() && !engine->supportLanguage(abbreviations.first)) {
+                return;
+            }
+
+            if (!engine->supportLanguage(abbreviations.second)) {
+                return;
+            }
             QString result;
-            if (engine->translate(languages, text, result)) { // translate ok
-                context.addMatch(generateTranslationMatch(engine->getProviderName(), result, languages.second)); // add translation result
+            if (engine->translate(abbreviations, text, result)) { // translate ok
+                context.addMatch(generateTranslationMatch(engine->getProviderName(), result, abbreviations.second)); // add translation result
             }  
         });
     }
-    if (!languages.first.isEmpty()) {
+    if (!abbreviations.first.isEmpty()) {
         // when source language is provided, you can play source text as well
-        auto match = generateTranslationMatch(QStringLiteral("Input text") , text, languages.first);
+        auto match = generateTranslationMatch(QStringLiteral("Input text") , text, abbreviations.first);
         // reduce relevance 
         match.setRelevance(0);  
         match.setSubtext(QString());
@@ -93,7 +98,7 @@ void KRunnerTranslator::run(const KRunner::RunnerContext &context, const KRunner
     
 }
 
-bool KRunnerTranslator::parseTerm(const QString &term, QString &text, QPair<QString, QString> &languages) {
+bool KRunnerTranslator::parseQuery(const QString &term, QString &text, QPair<QString, QString> &languages) {
     // format: "abbr-src:abbr-dest text-to-translate"
     // or "abbr-dest text-to-translate"
     // language.first == abbr-src, language.second == abbr-dest
@@ -116,24 +121,13 @@ bool KRunnerTranslator::parseTerm(const QString &term, QString &text, QPair<QStr
     const qint64 indexColon = abbrs.indexOf(QStringLiteral(":"));
 
     if (indexColon == -1) { // destination language only
-        if (languageRepository.containsAbbreviation(abbrs)) {
-            languages.first = QString();
-            languages.second = abbrs;
-            return true;
-        } else {
-            return false;
-        }
+        languages.first = QString();
+        languages.second = abbrs.toLower();
+        return true;
     } else {    // src:dest pair
-        QString first = abbrs.first(indexColon);
-        QString second = abbrs.mid(indexColon + 1);
-        if (languageRepository.containsAbbreviation(first)
-                && languageRepository.containsAbbreviation(second)) {
-            languages.first = first;
-            languages.second = second;
-            return true;
-        } else {
-            return false;
-        }
+        languages.first = abbrs.first(indexColon).toLower();
+        languages.second = abbrs.mid(indexColon + 1).toLower();
+        return true;
     }
 }
 
@@ -176,7 +170,6 @@ void KRunnerTranslator::reloadConfiguration() {
             group.readEntry(CONFIG_LIBRE_KEY, QString()));
         engines.append(t);
     }
-
 }
 
 K_PLUGIN_CLASS_WITH_JSON(KRunnerTranslator, "krunnertranslator.json")

@@ -16,17 +16,28 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#include "languages.h"
+#ifndef LANGUAGES_H
+#define LANGUAGES_H
 
-Language::Language(SupportedLanguage language, QString name, QString abbreviation)
-        : name(name), abbreviation(abbreviation){
-    Q_UNUSED(language)
-}
 
-QString Language::getCombinedName() {
-    return name + QStringLiteral(" (") + abbreviation + QStringLiteral(")");
-}
+#include <QString>
 
-QString Language::getAbbreviation() {
-    return abbreviation;
-}
+class Language {
+
+public:
+	explicit Language() = default;
+
+    Language(QString abbreviation, QString name);
+
+    ~Language() = default;
+
+    const QString &getAbbreviation() const;
+
+    const QString &getName() const;
+
+private:
+	QString abbreviation;
+    QString name;
+};
+
+#endif // LANGUAGES_H

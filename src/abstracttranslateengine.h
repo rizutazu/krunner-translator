@@ -11,13 +11,16 @@ public:
 
     virtual ~AbstractTranslateEngine() {};
 
+    // get translate provider name, e.g., Google, Deepl
     virtual const QString getProviderName() = 0;
-    // get translate provider name, e.g Google Translate, Deepl Translate
 
-    virtual bool translate(const QPair<QString, QString> &languages, const QString &text, QString &result) = 0;
-    // bool translate(): translate given `text` to target language, put translation at `result`
-    // languages.first is translate source language, languages.second is translate target language
+    // whether given languages are supported by this translate engine
+    virtual bool supportLanguage(const QString &abbreviations) = 0;
+
+    // translate given `text` to target language, put translation at `result`
+    // abbreviations.first is source language abbr, abbreviations.second is target language abbr
     // return true if translate is ok, false if any error has occurred.
+    virtual bool translate(const QPair<QString, QString> &abbreviations, const QString &text, QString &result) = 0;
 };
 
 

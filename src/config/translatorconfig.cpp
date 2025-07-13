@@ -8,7 +8,7 @@ K_PLUGIN_CLASS(TranslatorConfig)
 
 TranslatorConfig::TranslatorConfig(QObject *parent) : KCModule(parent) {
     ui = new Ui::TranslatorConfigUI();
-    ui->setupUi(widget());
+    ui->setupUi(KCModule::widget());
 
     connect(ui->googleCheckBox, &QCheckBox::checkStateChanged, this, &TranslatorConfig::markAsChanged);
     connect(ui->bingCheckBox,&QCheckBox::checkStateChanged, this, &TranslatorConfig::markAsChanged);

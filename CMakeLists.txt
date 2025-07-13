@@ -37,11 +37,11 @@ target_link_libraries(kcm_krunner_translator
 )
 
 set(krunner_translator_SRCS
-        src/krunnertranslator.cpp src/krunnertranslator.h
+        src/krunnertranslator.h src/krunnertranslator.cpp
 
-        src/languagerepository.cpp src/languagerepository.h
-        src/languages.cpp src/languages.h 
-        src/supportedlanguages.h
+        src/languagerepository.h src/languagerepository.cpp
+        src/language.h src/language.cpp
+        src/predefined.h src/predefined.cpp
 
         src/api/deeplapi.h src/api/deeplapi.cpp
         src/api/libretranslateapi.h src/api/libretranslateapi.cpp
