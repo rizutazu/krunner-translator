@@ -15,7 +15,7 @@
         "Icon": "applications-education-language",
         "License": "GPL",
         "Name": "Translator",
-        "Version": "0.0.3"
+        "Version": "0.0.4"
     },
     "X-Plasma-AdvertiseSingleRunnerQueryMode": true,
     "X-KDE-ConfigModule": "kf6/krunner/kcms/kcm_krunner_translator"

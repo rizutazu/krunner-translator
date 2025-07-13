@@ -34,7 +34,7 @@ class KRunnerTranslator : public KRunner::AbstractRunner
 
 public:
     KRunnerTranslator(QObject *parent, const KPluginMetaData &metaData);
-    ~KRunnerTranslator();
+    ~KRunnerTranslator() override;
     void match(KRunner::RunnerContext &context) override;
     void run(const KRunner::RunnerContext &context, const KRunner::QueryMatch &match) override;
     void reloadConfiguration() override;
@@ -42,8 +42,8 @@ public:
 private:
     static bool parseQuery(const QString &term, QString &text, QPair<QString, QString> &languages);
 
+    // Translation match should have a provider name
     KRunner::QueryMatch generateTranslationMatch(const QString &provider, const QString &result, const QString &language);
-    // Translation match should have a provider mark
 
     LanguageRepository languageRepository;
 

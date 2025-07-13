@@ -184,6 +184,7 @@ public:
     static Language Yoruba;
     static Language YucatecMaya;
     static Language Zulu;
+
 	static void init();
 };
 

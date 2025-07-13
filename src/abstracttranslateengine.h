@@ -7,9 +7,9 @@
 // AbstractTranslateEngine defines translator interface
 class AbstractTranslateEngine {
 public:
-    AbstractTranslateEngine() {};
+    AbstractTranslateEngine() = default;
 
-    virtual ~AbstractTranslateEngine() {};
+    virtual ~AbstractTranslateEngine() = default;
 
     // get translate provider name, e.g., Google, Deepl
     virtual const QString getProviderName() = 0;

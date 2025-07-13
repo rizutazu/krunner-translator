@@ -21,8 +21,8 @@
 #include <utility>
 
 Language::Language(QString abbreviation, QString name) {
-    this->abbreviation = abbreviation;
-    this->name = name;
+    this->abbreviation = std::move(abbreviation);
+    this->name = std::move(name);
 }
 
 const QString &Language::getAbbreviation() const {
