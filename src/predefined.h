@@ -34,6 +34,9 @@ public:
     static Language ChineseLiterary;
     static Language ChineseSimplified;
     static Language ChineseTraditional;
+	// hans/hant are used by deepl
+	static Language ChineseSimplifiedHANS;
+	static Language ChineseTraditionalHANT;
 
     static Language Chuvash;
     static Language Corsican;
@@ -46,10 +49,10 @@ public:
     static Language Dutch;
     static Language EasternMari;
 
-	// english variants
+	// english variants, seems like trans shell do not distinguish these variants
     static Language English;
 	static Language EnglishUS;
-	static Language EnglishUK;
+	static Language EnglishGB;
 
 	static Language Esperanto;
     static Language Estonian;
@@ -153,7 +156,11 @@ public:
     static Language Slovak;
     static Language Slovenian;
     static Language Somali;
+
+	// spanish variants supported by deepl
     static Language Spanish;
+	static Language SpanishLatinAmerican;
+
     static Language Sundanese;
     static Language Swahili;
     static Language Swedish;
@@ -208,7 +215,6 @@ public:
 	repo.addLanguage(Predefined::Dhivehi); repo.addLanguage(Predefined::Dogri);\
 	repo.addLanguage(Predefined::Dutch); repo.addLanguage(Predefined::EasternMari);\
 	repo.addLanguage(Predefined::English); repo.addLanguage(Predefined::Esperanto);\
-	repo.addLanguage(Predefined::EnglishUS); repo.addLanguage(Predefined::EnglishUK);\
 	repo.addLanguage(Predefined::Estonian); repo.addLanguage(Predefined::Ewe);\
 	repo.addLanguage(Predefined::Faroese); repo.addLanguage(Predefined::Fijian);\
 	repo.addLanguage(Predefined::Filipino); repo.addLanguage(Predefined::Finnish);\
@@ -279,6 +285,8 @@ public:
 	repo.addLanguage(Predefined::Czech); repo.addLanguage(Predefined::Danish);\
 	repo.addLanguage(Predefined::German); repo.addLanguage(Predefined::Greek);\
 	repo.addLanguage(Predefined::English); repo.addLanguage(Predefined::Spanish);\
+	repo.addLanguage(Predefined::EnglishUS); repo.addLanguage(Predefined::EnglishGB);\
+	repo.addLanguage(Predefined::SpanishLatinAmerican);\
 	repo.addLanguage(Predefined::Estonian); repo.addLanguage(Predefined::Finnish);\
 	repo.addLanguage(Predefined::French); repo.addLanguage(Predefined::Hebrew);\
 	repo.addLanguage(Predefined::Hungarian); repo.addLanguage(Predefined::Indonesian);\
@@ -287,11 +295,13 @@ public:
 	repo.addLanguage(Predefined::Latvian); repo.addLanguage(Predefined::NorwegianNB);\
 	repo.addLanguage(Predefined::Dutch); repo.addLanguage(Predefined::Polish);\
 	repo.addLanguage(Predefined::Portuguese); repo.addLanguage(Predefined::Romanian);\
+	repo.addLanguage(Predefined::PortugueseBrazilian); repo.addLanguage(Predefined::PortugueseEuropean);\
 	repo.addLanguage(Predefined::Russian); repo.addLanguage(Predefined::Slovak);\
 	repo.addLanguage(Predefined::Slovenian); repo.addLanguage(Predefined::Swedish);\
 	repo.addLanguage(Predefined::Thai); repo.addLanguage(Predefined::Turkish);\
 	repo.addLanguage(Predefined::Ukrainian); repo.addLanguage(Predefined::Vietnamese);\
-	repo.addLanguage(Predefined::Chinese);
+	repo.addLanguage(Predefined::Chinese);\
+	repo.addLanguage(Predefined::ChineseSimplifiedHANS); repo.addLanguage(Predefined::ChineseTraditionalHANT);
 
 
 

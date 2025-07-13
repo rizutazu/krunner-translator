@@ -24,6 +24,8 @@ Language Predefined::Chinese;
 Language Predefined::ChineseLiterary;
 Language Predefined::ChineseSimplified;
 Language Predefined::ChineseTraditional;
+Language Predefined::ChineseSimplifiedHANS;
+Language Predefined::ChineseTraditionalHANT;
 Language Predefined::Chuvash;
 Language Predefined::Corsican;
 Language Predefined::Croatian;
@@ -36,7 +38,7 @@ Language Predefined::Dutch;
 Language Predefined::EasternMari;
 Language Predefined::English;
 Language Predefined::EnglishUS;
-Language Predefined::EnglishUK;
+Language Predefined::EnglishGB;
 Language Predefined::Esperanto;
 Language Predefined::Estonian;
 Language Predefined::Ewe;
@@ -134,6 +136,7 @@ Language Predefined::Slovak;
 Language Predefined::Slovenian;
 Language Predefined::Somali;
 Language Predefined::Spanish;
+Language Predefined::SpanishLatinAmerican;
 Language Predefined::Sundanese;
 Language Predefined::Swahili;
 Language Predefined::Swedish;
@@ -191,6 +194,8 @@ void Predefined::init() {
     ChineseLiterary = Language(QStringLiteral("lzh"), QStringLiteral("Chinese Literary"));
     ChineseSimplified = Language(QStringLiteral("zh-cn"), QStringLiteral("Chinese Simplified"));
     ChineseTraditional = Language(QStringLiteral("zh-tw"), QStringLiteral("Chinese Traditional"));
+    ChineseSimplifiedHANS = Language(QStringLiteral("zh-hans"), QStringLiteral("Chinese Simplified"));
+    ChineseTraditionalHANT = Language(QStringLiteral("zh-hant"), QStringLiteral("Chinese Traditional"));
 
     Chuvash = Language(QStringLiteral("cv"), QStringLiteral("Chuvash"));
     Corsican = Language(QStringLiteral("co"), QStringLiteral("Corsican"));
@@ -205,7 +210,7 @@ void Predefined::init() {
 
     English = Language(QStringLiteral("en"), QStringLiteral("English"));
     EnglishUS = Language(QStringLiteral("en-us"), QStringLiteral("English United States"));
-    EnglishUK = Language(QStringLiteral("en-uk"), QStringLiteral("English United Kingdom"));
+    EnglishGB = Language(QStringLiteral("en-gb"), QStringLiteral("English United Kingdom"));
 
     Esperanto = Language(QStringLiteral("eo"), QStringLiteral("Esperanto"));
     Estonian = Language(QStringLiteral("et"), QStringLiteral("Estonian"));
@@ -308,7 +313,10 @@ void Predefined::init() {
     Slovak = Language(QStringLiteral("sk"), QStringLiteral("Slovak"));
     Slovenian = Language(QStringLiteral("sl"), QStringLiteral("Slovenian"));
     Somali = Language(QStringLiteral("so"), QStringLiteral("Somali"));
+
     Spanish = Language(QStringLiteral("es"), QStringLiteral("Spanish"));
+    SpanishLatinAmerican = Language(QStringLiteral("es-419"), QStringLiteral("Spanish Latin American"));
+
     Sundanese = Language(QStringLiteral("su"), QStringLiteral("Sundanese"));
     Swahili = Language(QStringLiteral("sw"), QStringLiteral("Swahili"));
     Swedish = Language(QStringLiteral("sv"), QStringLiteral("Swedish"));

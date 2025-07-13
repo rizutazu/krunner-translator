@@ -67,7 +67,7 @@ void KRunnerTranslator::match(KRunner::RunnerContext &context) {
                 return;
             }
             QString result;
-            if (engine->translate(abbreviations, text, result)) { // translate ok
+            if (engine->translate(abbreviations, text, result) && !result.isEmpty()) { // translate ok && check if empty
                 context.addMatch(generateTranslationMatch(engine->getProviderName(), result, abbreviations.second)); // add translation result
             }  
         });

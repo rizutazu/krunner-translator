@@ -20,9 +20,9 @@ Supported engines:
 
 Screenshots:
 
-<img src="assets/image-20250208184026016.png" alt="translate result" style="zoom: 50%;"/>
+<img src="assets/image-20250208184026016.png" alt="translate result" style="zoom: 30%;"/>
 
-<img src="assets/image2.png" alt="configure menu" style="zoom: 50%"/>
+<img src="assets/image2.png" alt="configure menu" style="zoom: 30%"/>
 
 ## Usage
 
@@ -31,10 +31,19 @@ This plugin supports two input schemes:
 1. `target_abbr text`
 2. `source_abbr:target_abb text`
 
-`target_abbr` / `source_abbr` means the abbreviation of source/target language respectively, 
+`target_abbr` / `source_abbr` means the abbreviation of source/target language respectively, case-insensitive. 
 `text` means the text you want to translate.
 
-You can find supported language abbreviation at [here](src/languagerepository.cpp).
+Different engine has different supported languages:
+
+- `Google Translate` and `Bing Translate`: Both implemented by running [Translate Shell](https://github.com/soimort/translate-shell) in the background, 
+[link to supported language and abbreviations](https://github.com/soimort/translate-shell/wiki/Languages). These extra abbreviations
+are supported as well: 
+  - `zh`: Chinese without variant specification
+  - `pt`: Portuguese without variant specification
+  - `nb`: Norwegian abbreviation used by Deepl 
+- `Deepl Web Translate`: [link](https://developers.deepl.com/docs/getting-started/supported-languages)
+- `Libre Translate`: There is no predefined supported language checking, make sure you entered correct abbreviations
 
 Example:
 
