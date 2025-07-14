@@ -25,7 +25,7 @@
 class Language {
 
 public:
-	explicit Language() = default;
+    explicit Language() = default;
 
     Language(QString abbreviation, QString name);
 
@@ -36,7 +36,7 @@ public:
     const QString &getName() const;
 
 private:
-	QString abbreviation;
+    QString abbreviation;
     QString name;
 };
 

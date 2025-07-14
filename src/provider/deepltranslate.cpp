@@ -3,8 +3,7 @@
 #include "predefined.h"
 
 // it sounds quite weird...
-class DeeplTranslate::API : public DeeplAPI {
-};
+class DeeplTranslate::API : public DeeplAPI {};
 
 DeeplTranslate::DeeplTranslate() {
     api = new API();

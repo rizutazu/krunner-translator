@@ -1,9 +1,7 @@
 #include "libretranslate.h"
 #include "libretranslateapi.h"
 
-class LibreTranslate::API : public LibreTranslateAPI {
-
-};
+class LibreTranslate::API : public LibreTranslateAPI {};
 
 LibreTranslate::LibreTranslate() {
     api = new API();
