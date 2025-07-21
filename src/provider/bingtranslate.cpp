@@ -1,8 +1,10 @@
 #include "bingtranslate.h"
 #include "translateshell.h"
 
-const QString BingTranslate::getProviderName() {
-    return QStringLiteral("Bing");
+QString BingTranslate::provider = QStringLiteral("Bing");
+
+const QString &BingTranslate::getProviderName() const {
+    return provider;
 }
 
 bool BingTranslate::translate(const QPair<QString, QString> &abbreviations, const QString &text, QString &result) {

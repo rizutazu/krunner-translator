@@ -198,6 +198,7 @@ namespace Predefined {
 #define AddTranslateShellSupportedLanguage(repo) \
     do { \
         using namespace Predefined;\
+        Predefined::init();\
         repo.addLanguage(Afrikaans); repo.addLanguage(Albanian);\
         repo.addLanguage(Amharic); repo.addLanguage(Arabic);\
         repo.addLanguage(Armenian); repo.addLanguage(Assamese);\
@@ -286,6 +287,7 @@ namespace Predefined {
 #define AddDeeplSupportedLanguage(repo) \
     do { \
         using namespace Predefined;\
+        Predefined::init();\
         repo.addLanguage(Arabic); repo.addLanguage(Bulgarian);\
         repo.addLanguage(Czech); repo.addLanguage(Danish);\
         repo.addLanguage(German); repo.addLanguage(Greek);\

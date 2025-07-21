@@ -1,8 +1,10 @@
 #include "googletranslate.h"
 #include "translateshell.h"
 
-const QString GoogleTranslate::getProviderName() {
-    return QStringLiteral("Google");
+QString GoogleTranslate::provider = QStringLiteral("Google");
+
+const QString &GoogleTranslate::getProviderName() const {
+    return provider;
 }
 
 bool GoogleTranslate::translate(const QPair<QString, QString> &abbreviations, const QString &text, QString &result) {

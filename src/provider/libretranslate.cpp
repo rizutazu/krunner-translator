@@ -2,6 +2,7 @@
 #include "libretranslateapi.h"
 
 class LibreTranslate::API : public LibreTranslateAPI {};
+QString LibreTranslate::provider = QStringLiteral("Libre Translate");
 
 LibreTranslate::LibreTranslate() {
     api = new API();
@@ -11,8 +12,8 @@ LibreTranslate::~LibreTranslate() {
     delete api;
 }
 
-const QString LibreTranslate::getProviderName() {
-    return QStringLiteral("Libre Translate");
+const QString &LibreTranslate::getProviderName() const {
+    return provider;
 }
 
 bool LibreTranslate::translate(const QPair<QString, QString> &languages, const QString &text, QString &result) {

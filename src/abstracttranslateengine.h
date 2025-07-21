@@ -12,7 +12,7 @@ public:
     virtual ~AbstractTranslateEngine() = default;
 
     // get translate provider name, e.g., Google, Deepl
-    virtual const QString getProviderName() = 0;
+    virtual const QString &getProviderName() const = 0;
 
     // whether given languages are supported by this translate engine
     virtual bool supportLanguage(const QString &abbreviations) = 0;

@@ -29,6 +29,7 @@ public:
     static void playAudio(const QString &text, const QString &abbreviation);
     static bool translate(const QString &engine, const QPair<QString, QString> &abbreviations, const QString &text, QString &result);
     static bool supportLanguage(const QString &abbreviation);
+
 private:
     // the actual init function
     static void init();

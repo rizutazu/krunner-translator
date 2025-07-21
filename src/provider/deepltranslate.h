@@ -10,12 +10,13 @@ class DeeplTranslate : public AbstractTranslateEngine {
 public:
     explicit DeeplTranslate();
     ~DeeplTranslate() override;
-    const QString getProviderName() override;
+    const QString &getProviderName() const override;
     bool translate(const QPair<QString, QString> &abbreviations, const QString &text, QString &result) override;
     bool supportLanguage(const QString &abbreviation) override;
 
 private:
-    LanguageRepository repo;
+    static QString provider;
+    static LanguageRepository repo;
 
     class API;
     API *api;

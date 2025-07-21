@@ -5,6 +5,9 @@
 // it sounds quite weird...
 class DeeplTranslate::API : public DeeplAPI {};
 
+QString DeeplTranslate::provider = QStringLiteral("Deepl");
+LanguageRepository DeeplTranslate::repo;
+
 DeeplTranslate::DeeplTranslate() {
     api = new API();
     AddDeeplSupportedLanguage(repo);
@@ -14,8 +17,8 @@ DeeplTranslate::~DeeplTranslate() {
     delete api;
 }
 
-const QString DeeplTranslate::getProviderName() {
-    return QStringLiteral("Deepl");
+const QString &DeeplTranslate::getProviderName() const {
+    return provider;
 }
 
 bool DeeplTranslate::supportLanguage(const QString &abbreviation) {

@@ -170,7 +170,12 @@ namespace Predefined {
     Language YucatecMaya;
     Language Zulu;
 
+    static bool initialized;
+
     void init() {
+        if (initialized) {
+            return;
+        }
         Afrikaans = Language(QStringLiteral("af"), QStringLiteral("Afrikaans"));
         Albanian = Language(QStringLiteral("sq"), QStringLiteral("Albanian"));
         Amharic = Language(QStringLiteral("am"), QStringLiteral("Amharic"));
@@ -349,5 +354,7 @@ namespace Predefined {
         Yoruba = Language(QStringLiteral("yo"), QStringLiteral("Yoruba"));
         YucatecMaya = Language(QStringLiteral("yua"), QStringLiteral("Yucatec Maya"));
         Zulu = Language(QStringLiteral("zu"), QStringLiteral("Zulu"));
+
+        initialized = true;
     }
 }

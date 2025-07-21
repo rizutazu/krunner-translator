@@ -23,8 +23,6 @@
 LanguageRepository TranslateShell::repo;
 
 void TranslateShell::init() {
-    // enforce initialization order
-    Predefined::init();
     AddTranslateShellSupportedLanguage(repo);
 }
 
