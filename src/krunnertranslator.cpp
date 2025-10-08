@@ -54,6 +54,16 @@ void KRunnerTranslator::match(KRunner::RunnerContext &context) {
     QThread::sleep(std::chrono::nanoseconds(5 * 1000000));  // sleep for 0.5s to avoid incomplete input
     if (!context.isValid()) return;
 
+    if (!abbreviations.first.isEmpty()) {
+        // when source language is provided, you can play source text as well
+        auto match = generateTranslationMatch(QStringLiteral("Input text") , text, abbreviations.first);
+        // reduce relevance
+        match.setRelevance(0);
+        match.setSubtext(QString());
+        match.setMatchCategory(QStringLiteral("Input text"));
+        context.addMatch(match);
+    }
+
     // qDebug() << "Parse ok, lang: " << abbreviations.first << ":" << abbreviations.second << " text: " << text << "\n";
     for (auto engine : engines) {
         // variable `engine` should not be reference capture,
@@ -72,28 +82,21 @@ void KRunnerTranslator::match(KRunner::RunnerContext &context) {
             }  
         });
     }
-    if (!abbreviations.first.isEmpty()) {
-        // when source language is provided, you can play source text as well
-        auto match = generateTranslationMatch(QStringLiteral("Input text") , text, abbreviations.first);
-        // reduce relevance 
-        match.setRelevance(0);  
-        match.setSubtext(QString());
-        match.setMatchCategory(QStringLiteral("Input text"));
-        context.addMatch(match); 
-        
-    }
+
     QThreadPool::globalInstance()->waitForDone();
 }
 
 void KRunnerTranslator::run(const KRunner::RunnerContext &context, const KRunner::QueryMatch &match) {
-    Q_UNUSED(context);
-    if (match.selectedAction().id() == QStringLiteral("copy")) {
-        QApplication::clipboard()->setText(match.text());
-    } else if (match.selectedAction().id() == QStringLiteral("play")) {
+    // use selected playAction
+    if (match.selectedAction() == playAction) {
         TranslateShell::playAudio(match.text(), match.data().toString());
+        // do not close krunner after click play
+        context.requestQueryStringUpdate(context.query(), static_cast<int>(context.query().length()));
+        return;
     }
 
-    // User pressed Enter maybe
+    // User pressed Enter / selected copyAction: close krunner
+    context.requestQueryStringUpdate(QString(), 0);
     QApplication::clipboard()->setText(match.text());
     
 }
